@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-webhook-duckdns
+  namespace: cert-manager
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: 'https://github.com/ebrianne/cert-manager-webhook-duckdns.git'
+    targetRevision: v1.2.2
+    path: deploy/cert-manager-webhook-duckdns
+    helm:
+      parameters:
+        - name: clusterIssuer.production.create
+          value: 'true'
+        - name: clusterIssuer.staging.create
+          value: 'true'
+        - name: clusterIssuer.email
+          value: {{ .Values.duckdns.email }}
+        - name: duckdns.token
+          value: {{ .Values.duckdns.token }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true

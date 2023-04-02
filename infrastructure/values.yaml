@@ -1,6 +1,10 @@
 host:
   domainName: duckdns.org
 
+duckdns:
+  token: TODO
+  email: todo@email.com
+
 destination:
   server: https://kubernetes.default.svc
   project: default
