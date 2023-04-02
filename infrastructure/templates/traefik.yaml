@@ -6,7 +6,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  project: infrastructure
+  project: {{ .Values.destination.project }}
   source:
     repoURL: 'https://traefik.github.io/charts'
     targetRevision: 22.0.0
