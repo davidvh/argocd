@@ -7,8 +7,8 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    server: {{ .spec.destination.server }}
-    namespace: {{ .spec.destination.namespace }}
+    server: {{ .Values.destination.server }}
+    namespace: {{ .Values.destination.namespace }}
   project: infrastructure
   source:
     path: charts/argo-cd
