@@ -7,13 +7,13 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    server: {{ .Values.destination.server }}
-    namespace: {{ .Values.destination.namespace }}
+    server: {{ .Values.spec.destination.server }}
+    namespace: argocd
   project: infrastructure
   source:
     path: charts/argo-cd
-    repoURL: https://github.com/dahenr/argocd.git
-    targetRevision: HEAD
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
