@@ -7,6 +7,6 @@ resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/install.yaml
 
 patchesStrategicMerge:
-- argocd-cm.yaml
+- argocd-cmd-params-cm.yaml
 
 namespace: argocd

@@ -3,4 +3,4 @@ data:
   server.insecure: "true"
 kind: ConfigMap
 metadata:
-  name: argocd-cm
+  name: argocd-cmd-params-cm
