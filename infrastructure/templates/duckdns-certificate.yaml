@@ -3,6 +3,8 @@ kind: Certificate
 metadata:
   name: host-domainname-cert
   namespace: services
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   dnsNames:
   - {{ .Values.host.domainName }}
