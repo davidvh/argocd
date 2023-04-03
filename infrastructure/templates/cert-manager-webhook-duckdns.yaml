@@ -9,7 +9,7 @@ spec:
   project: {{ .Values.destination.project }}
   source:
     repoURL: 'https://github.com/ebrianne/cert-manager-webhook-duckdns.git'
-    targetRevision: v1.2.2
+    targetRevision: HEAD
     path: deploy/cert-manager-webhook-duckdns
     helm:
       parameters:

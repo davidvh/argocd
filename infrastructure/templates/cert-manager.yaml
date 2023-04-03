@@ -9,7 +9,7 @@ spec:
   project: {{ .Values.destination.project }}
   source:
     repoURL: 'https://charts.jetstack.io'
-    targetRevision: 1.2.0
+    targetRevision: v1.11.0
     chart: cert-manager
   destination:
     server: {{ .Values.destination.server }}
