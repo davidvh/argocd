@@ -10,6 +10,10 @@ spec:
   source:
     repoURL: 'https://charts.jetstack.io'
     targetRevision: v1.11.0
+    helm:
+      parameters:
+        - name: installCRDs
+          value: 'true'
     chart: cert-manager
   destination:
     server: {{ .Values.destination.server }}
