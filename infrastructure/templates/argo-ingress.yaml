@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "2"
-    cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-staging
+    cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-production
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
