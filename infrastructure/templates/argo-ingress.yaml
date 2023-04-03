@@ -4,6 +4,7 @@ metadata:
   name: argocd-server-http-ingress
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   rules:
   - http:
