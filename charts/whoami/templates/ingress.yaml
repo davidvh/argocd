@@ -9,7 +9,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.url }}
-      secretName: {{ .Values.service.name }}-cert
+      secretName: cert-{{ .Values.service.name }}
  rules:
    - host: {{ .Values.ingress.url }}
      http:
