@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: whoami-example
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    targetRevision: HEAD
+    path: charts/whoami
+    helm:
+      parameters:
+        - name: ingress.url
+          value: whoami.{{ .Values.host.domainName }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: whoami
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true

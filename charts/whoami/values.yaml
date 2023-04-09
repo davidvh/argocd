@@ -1,0 +1,5 @@
+service:
+  name: whoami
+
+ingress:
+  url: whoami.example.com
