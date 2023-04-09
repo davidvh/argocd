@@ -3,17 +3,29 @@ kind: Deployment
 metadata:
  name: {{ .Values.service.name }}
 spec:
- selector:
-   matchLabels:
-     app: {{ .Values.service.name }}
- template:
-   metadata:
-     labels:
-       app: {{ .Values.service.name }}
-   spec:
-     containers:
-       - name: {{ .Values.service.name }}
-         image: traefik/whoami
-         ports:
-           - name: web
-             containerPort: 80
+  selector:
+    matchLabels:
+      app: {{ .Values.service.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.service.name }}
+    spec:
+      containers:
+        - name: {{ .Values.service.name }}
+          image: traefik/whoami
+          ports:
+            - name: web
+              containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 10
+          readinessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 10
