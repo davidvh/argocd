@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx
+  name: contour
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ .Values.destination.project }}
   source:
-    repoURL: "https://kubernetes.github.io/ingress-nginx"
-    targetRevision: 4.6.0
-    chart: ingress-nginx
+    repoURL: "https://charts.bitnami.com/bitnami"
+    targetRevision: 11.1.2
+    chart: contour
   destination:
     server: {{ .Values.destination.server }}
-    namespace: ingress-nginx
+    namespace: projectcontour
   syncPolicy:
     automated:
       prune: true
