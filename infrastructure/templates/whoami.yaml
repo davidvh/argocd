@@ -4,11 +4,11 @@ metadata:
   name: whoami-example
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ .Values.destination.project }}
   source:
-    repoURL: 'https://github.com/davidvh/argocd.git'
+    repoURL: "https://github.com/davidvh/argocd.git"
     targetRevision: HEAD
     path: charts/whoami
     helm:

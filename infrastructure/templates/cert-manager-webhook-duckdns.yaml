@@ -4,21 +4,21 @@ metadata:
   name: cert-manager-webhook-duckdns
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   project: {{ .Values.destination.project }}
   source:
-    repoURL: 'https://github.com/ebrianne/cert-manager-webhook-duckdns.git'
+    repoURL: "https://github.com/ebrianne/cert-manager-webhook-duckdns.git"
     targetRevision: HEAD
     path: deploy/cert-manager-webhook-duckdns
     helm:
       parameters:
         - name: clusterIssuer.production.create
-          value: 'true'
+          value: "true"
         - name: clusterIssuer.staging.create
-          value: 'true'
+          value: "true"
         - name: clusterIssuer.email
           value: {{ .Values.duckdns.email }}
         - name: duckdns.token

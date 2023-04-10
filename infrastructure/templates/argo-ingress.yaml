@@ -11,17 +11,17 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   rules:
-  - host: argocd.{{ .Values.host.domainName }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: argocd-server
-            port:
-              name: https
+    - host: argocd.{{ .Values.host.domainName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  name: https
   tls:
-  - hosts:
-    - argocd.{{ .Values.host.domainName }}
-    secretName: argocd-secret # do not change, this is provided by Argo CD
+    - hosts:
+        - argocd.{{ .Values.host.domainName }}
+      secretName: argocd-secret # do not change, this is provided by Argo CD
