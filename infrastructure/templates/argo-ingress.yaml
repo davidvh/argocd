@@ -7,8 +7,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
     cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-production
     kubernetes.io/tls-acme: "true"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   rules:
     - host: argocd.{{ .Values.host.domainName }}
@@ -20,7 +19,7 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  name: https
+                  name: http
   tls:
     - hosts:
         - argocd.{{ .Values.host.domainName }}
