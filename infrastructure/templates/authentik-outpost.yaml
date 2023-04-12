@@ -1,16 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: authentik-outpost
-    namespace: authentik
+  name: authentik-outpost
 spec:
-    rules:
-        - host: akoutpost.{{ .Values.host.domainName }}
-          http:
-              paths: /outpost.goauthentik.io
-              pathType: Prefix
-              backend:
-                  service:
-                      name: ak-outpost-authentik-embedded-outpost
-                      port:
-                          number: 9000
+  rules:
+    - host: akoutpost.{{ .Values.host.domainName }}
+      http:
+        paths: /outpost.goauthentik.io
+        pathType: Prefix
+        backend:
+          service:
+            name: ak-outpost-authentik-embedded-outpost
+            port:
+              number: 9000
