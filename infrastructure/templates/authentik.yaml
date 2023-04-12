@@ -16,14 +16,10 @@ spec:
           value: "true"
         - name: "ingress.hosts[0].host"
           value: authentik.{{ .Values.host.domainName }}
-        - name: "ingress.annotations.\"cert-manager.io/cluster-issuer\""
-          value: cert-manager-webhook-duckdns-production
-        - name: "ingress.annotations.\"kubernetes.io/tls-acme\""
-          value: "true"
-        - name: "ingress.tls[0].hosts[0]"
-          value: authentik.{{ .Values.host.domainName }}
-        - name: "ingress.tls[0].secretName"
-          value: cert-authentik
+        - name: "ingress.annotations"
+          value: "{ \"cert-manager.io/cluster-issuer\": \"cert-manager-webhook-duckdns-production\", \"kubernetes.io/tls-acme\": \"true\" }"
+        - name: "ingress.tls"
+          value: "[ { \"hosts\": [\"authentik.{{ .Values.host.domainName }}\"], \"secretName\": \"cert-authentik\" } ]"
         - name: "authentik.secret_key"
           value: {{ .Values.authentik.secret_key }}
         - name: "authentik.postgresql.password"
