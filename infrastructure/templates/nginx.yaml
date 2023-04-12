@@ -13,7 +13,7 @@ spec:
     chart: ingress-nginx
     helm:
       parameters:
-        - name: controller.ingressClassResource.default
+        - name: "controller.ingressClassResource.default"
           value: "true"
   destination:
     server: {{ .Values.destination.server }}
