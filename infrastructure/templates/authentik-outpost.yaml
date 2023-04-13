@@ -3,7 +3,14 @@ kind: Ingress
 metadata:
   name: authentik-outpost
   namespace: authentik
+  annotations:
+    cert-manager.io/cluster-issuer: cert-manager-webhook-duckdns-production
+    kubernetes.io/tls-acme: "true"
 spec:
+  tls:
+    - hosts:
+        - akoutpost.{{ .Values.host.domainName }}
+      secretName: cert-akoutpost
   rules:
     - host: akoutpost.{{ .Values.host.domainName }}
       http:
