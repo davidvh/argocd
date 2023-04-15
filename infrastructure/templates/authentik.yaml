@@ -26,7 +26,7 @@ spec:
             kubernetes.io/tls-acme: "true"
           tls:
             - hosts:
-                - authentik.{{ .Values.host.domainName }}
+                - '*.{{ .Values.host.domainName }}'
               secretName: cert-authentik
           hosts:
             - host: authentik.{{ .Values.host.domainName }}

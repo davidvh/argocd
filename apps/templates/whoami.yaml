@@ -13,10 +13,8 @@ spec:
     path: charts/whoami
     helm:
       parameters:
-        - name: ingress.url
-          value: whoami.{{ .Values.host.domainName }}
-        - name: ingress.authurl
-          value: akoutpost.{{ .Values.host.domainName }}
+        - name: ingress.domainName
+          value: {{ .Values.host.domainName }}
   destination:
     server: {{ .Values.destination.server }}
     namespace: whoami
