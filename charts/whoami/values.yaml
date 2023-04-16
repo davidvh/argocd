@@ -2,5 +2,4 @@ service:
   name: whoami
 
 ingress:
-  url: whoami.example.com
-  authurl: akoutpost.example.com
+  domainName: example.com
