@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rancher
+  namespace: cattle-system
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: "https://releases.rancher.com/server-charts/stable"
+    targetRevision: "2.6.12"
+    helm:
+      values: |
+        hostname: rancher.{{ .Values.host.domainName }}
+    chart: rancher
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: cattle-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true
