@@ -1,22 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rancher
+  name: traefik
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ .Values.destination.project }}
   source:
-    repoURL: "https://releases.rancher.com/server-charts/stable"
-    targetRevision: "2.7.3"
-    helm:
-      values: |
-        hostname: rancher.{{ .Values.host.domainName }}
-    chart: rancher
+    repoURL: "https://traefik.github.io/charts"
+    targetRevision: 26.0.0
+    chart: traefik
   destination:
     server: {{ .Values.destination.server }}
-    namespace: cattle-system
+    namespace: traefik
   syncPolicy:
     automated:
       prune: true

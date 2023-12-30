@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/argo-cd
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
