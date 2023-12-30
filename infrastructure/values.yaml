@@ -1,13 +1,9 @@
 host:
-  domainName: duckdns.org
+  domainName: mydomain
 
-duckdns:
-  token: TODO
-  email: todo@email.com
-
-authentik:
-  secret_key: TODO
-  db_password: TODO
+cloudflare:
+  email: email@email.com
+  secret: TODO
 
 destination:
   server: https://kubernetes.default.svc
