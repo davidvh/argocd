@@ -1,0 +1,5 @@
+LLDAP provides basic LDAP services, sufficient for most services. 
+
+LLDAP will create an initial password. You can read this value by running `k3s kubectl -n lldap get secret lldap-credentials -o jsonpath="{.data.admin-pass}" | base64 -d && echo`
+
+Then navigate to `lldap.{domainName}` and log in with admin, admin-pass. From there you can change the admin password and add new users.
