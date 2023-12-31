@@ -12,7 +12,8 @@ It has been tested to work with TrueNAS Scale (https://www.truenas.com/truenas-s
 5. Open the TrueNAS console and use the `scripts/update_argocd.sh` commands to install argocd and enable temporary port forwarding.
 6. Manually edit your local c:\windows\system32\drivers\etc\hosts file to direct `argocd.<yourdomain>` to the TrueNAS IP.
 7. Connect to `https://argocd.<yourdomain>`
-8. Add the infrastructure chart from this repo. This will create an ingress for argocd and create a DNS server that can be used to forward your domain requests to the server from inside your network.
+8. Add the infrastructure chart from this repo. This will create an ingress for argocd and create a DNS server that can be used to forward your domain requests to the server from inside your network.  
+   Note that you will need to manually restart the argocd-server deployment to update the configuration.
 9. Update your router to use the TrueNAS IP address as the DNS resolver.
 
 ## Apps

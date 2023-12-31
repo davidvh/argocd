@@ -4,6 +4,8 @@ metadata:
   name: {{ include "blocky.fullname" . }}
   labels:
     {{- include "blocky.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
