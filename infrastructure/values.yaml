@@ -1,5 +1,12 @@
 host:
   domainName: mydomain
+  address: 127.0.0.1
+
+# Describe the local network to enable routing
+localNetwork:
+  domain: "" # The local domain of your network
+  dns: "" # The IP address of your network DNS provider (usually your router)
+  staticHosts: {} # A map of any static routes (e.g. `router.local: 127.0.0.1`)
 
 cloudflare:
   email: email@email.com

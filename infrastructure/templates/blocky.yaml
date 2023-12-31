@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/blocky
+    helm:
+      values: |-
+        customDns:
+          {{ .Values.host.domainName }}: {{ .Values.host.address }}
+          {{- if .Values.localNetwork.staticHosts }}
+          {{- .Values.localNetwork.staticHosts | toYaml | nindent 10 }}
+          {{- end }}
+        {{- if .Values.localNetwork.domain }}
+        customUpstream:
+            {{ .Values.localNetwork.domain }}: {{ .Values.localNetwork.dns }}
+        {{- end }}
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: argocd
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
