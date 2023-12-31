@@ -20,7 +20,7 @@ spec:
           {{- end }}
         {{- if .Values.localNetwork.domain }}
         customUpstream:
-            {{ .Values.localNetwork.domain }}: {{ .Values.localNetwork.dns }}
+          {{ .Values.localNetwork.domain }}: {{ .Values.localNetwork.dns }}
         {{- end }}
     targetRevision: HEAD
   destination:
