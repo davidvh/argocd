@@ -4,8 +4,6 @@ metadata:
   name: {{ include "blocky.fullname" . }}
   labels:
     {{- include "blocky.labels" . | nindent 4 }}
-  annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 3
@@ -18,6 +16,8 @@ spec:
     metadata:
       labels:
         {{- include "blocky.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ include "blocky.serviceAccountName" . }}
       automountServiceAccountToken: true
