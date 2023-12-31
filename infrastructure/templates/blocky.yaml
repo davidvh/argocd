@@ -25,7 +25,7 @@ spec:
     targetRevision: HEAD
   destination:
     server: {{ .Values.destination.server }}
-    namespace: argocd
+    namespace: blocky
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
