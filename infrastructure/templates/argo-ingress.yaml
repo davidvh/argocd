@@ -19,5 +19,5 @@ spec:
               service:
                 name: argocd
                 port:
-                  name: web
+                  name: http
 
