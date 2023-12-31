@@ -23,3 +23,10 @@ Argo can add additional applications, including charts from this repo.
 ### Authoring
 
 Helm supports previewing helm outputs. VSCode also includes this preview capabitliy, and some authoring tools, in a Kubernetes extension. 
+
+### Troubleshooting
+
+- ArgoCD may have problems deleting some resources. To resolve this:
+
+  1. Attempt to use `k3s kubectl delete ...` to delete the resource. This is likely to fail.
+  2. Use `k3s kubectl patch some-resource/some-name -n resource-namespace --type json --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]'` to force completion of the argocd finalizer.
