@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lldap.fullname" . }}-service
+  labels:
+    {{- include "lldap.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: "ldap"
+      port: 389
+      targetPort: 3890
+    - name: "web"
+      port: 80
+      targetPort: 17170
+  selector:
+    {{- include "lldap.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lldap.fullname" . }}
+  labels:
+    {{- include "lldap.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "lldap.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "lldap.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - image: nitnelave/lldap:{{ .Chart.AppVersion }}
+          name: {{ include "lldap.fullname" . }}
+          env:
+            - name: UID
+              value: "1001"
+            - name: GID
+              value: "1001"
+            - name: LLDAP_LDAP_BASE_DN
+              value: {{ .Values.lldapDn }}
+            - name: LLDAP_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lldap.fullname" . }}-credentials
+                  key: jwt-secret
+            - name: LLDAP_LDAP_USER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lldap.fullname" . }}-credentials
+                  key: admin-pass
+            - name: TZ
+              value: UTC
+          ports:
+            - containerPort: 3890
+            - containerPort: 17170
+          volumeMounts:
+            - mountPath: /data
+              name: lldap-data
+      restartPolicy: Always
+      volumes:
+        - name: lldap-data
+          persistentVolumeClaim:
+            claimName: {{ include "lldap.fullname" . }}-data
