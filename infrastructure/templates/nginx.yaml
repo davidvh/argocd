@@ -1,19 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: traefik
+  name: nginx
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ .Values.destination.project }}
   source:
-    repoURL: "https://traefik.github.io/charts"
-    targetRevision: 26.0.0
-    chart: traefik
+    repoURL: "https://kubernetes.github.io/ingress-nginx"
+    targetRevision: 4.9.0
+    chart: ingress-nginx
+    helm:
+      parameters:
+        - name: "controller.ingressClassResource.default"
+          value: "true"
   destination:
     server: {{ .Values.destination.server }}
-    namespace: traefik
+    namespace: ingress-nginx
   syncPolicy:
     automated:
       prune: true
