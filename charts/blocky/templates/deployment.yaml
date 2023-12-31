@@ -22,9 +22,6 @@ spec:
       serviceAccountName: {{ include "blocky.serviceAccountName" . }}
       automountServiceAccountToken: true
       runtimeClassName: 
-      hostNetwork: false
-      hostPID: false
-      hostIPC: false
       shareProcessNamespace: false
       enableServiceLinks: false
       restartPolicy: Always
@@ -61,13 +58,10 @@ spec:
         sysctls:
         - name: net.ipv4.ip_unprivileged_port_start
           value: "53"
-      hostUsers: true
       containers:
         - name: release-name-blocky
           image: spx01/blocky:v0.22
           imagePullPolicy: IfNotPresent
-          tty: false
-          stdin: false
           ports:
             - name: dnstcp
               containerPort: 53
