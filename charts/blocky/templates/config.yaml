@@ -5,11 +5,11 @@ data:
       default: {{ .Values.upstream | toYaml | nindent 8 }}
     {{- if .Values.customDns }}
     customDNS:
-      mappings: {{ .Values.customDns | toYaml | nindent 8 }}
+      mapping: {{ .Values.customDns | toYaml | nindent 8 }}
     {{- end }}
     {{- if .Values.customUpstream }}
     conditional:
-      mappings: {{ .Values.customUpstream | toYaml | nindent 8 }}
+      mapping: {{ .Values.customUpstream | toYaml | nindent 8 }}
     {{- end }}
     blocking:
       blackLists:
