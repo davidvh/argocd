@@ -12,6 +12,9 @@ cloudflare:
   email: email@email.com
   secret: TODO
 
+ldap:
+  dn: "dc=example,dc=com"
+
 destination:
   server: https://kubernetes.default.svc
   project: default

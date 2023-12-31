@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lldap
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/lldap
+    helm:
+      values: |-
+        domainName: {{ .Values.host.domainName }}
+        lldapDn: {{ .Values.ldap.dn | quote }}
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: lldap
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
