@@ -59,8 +59,8 @@ spec:
         - name: net.ipv4.ip_unprivileged_port_start
           value: "53"
       containers:
-        - name: release-name-blocky
-          image: spx01/blocky:v0.22
+        - name: {{ include "blocky.fullname" . }}
+          image: spx01/blocky:{{ .Chart.AppVersion }}
           imagePullPolicy: IfNotPresent
           ports:
             - name: dnstcp
