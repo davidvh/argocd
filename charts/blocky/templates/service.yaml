@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "blocky.fullname" . }}-dnstcp
+  labels:
+    {{- include "blocky.labels" . | nindent 4 }}
+    service.name: "dnstcp"
+spec:
+  type: LoadBalancer
+  publishNotReadyAddresses: false
+  ports:
+    - name: dnstcp
+      port: 53
+      protocol: TCP
+      targetPort: 53
+  selector:
+    {{- include "blocky.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "blocky.fullname" . }}-dnsudp
+  labels:
+    {{- include "blocky.labels" . | nindent 4 }}
+    service.name: "dnsudp"
+spec:
+  type: LoadBalancer
+  publishNotReadyAddresses: false
+  ports:
+    - name: dnsudp
+      port: 53
+      protocol: UDP
+      targetPort: 53
+  selector:
+    {{- include "blocky.selectorLabels" . | nindent 4 }}

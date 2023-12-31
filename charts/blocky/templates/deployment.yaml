@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "blocky.fullname" . }}
+  labels:
+    {{- include "blocky.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "blocky.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "blocky.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "blocky.serviceAccountName" . }}
+      automountServiceAccountToken: true
+      runtimeClassName: 
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      shareProcessNamespace: false
+      enableServiceLinks: false
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      topologySpreadConstraints:
+        - maxSkew: 1
+          whenUnsatisfiable: ScheduleAnyway
+          topologyKey: "truecharts.org/rack"
+          labelSelector:
+            matchLabels:      
+              {{- include "blocky.labels" . | nindent 14 }}
+          nodeAffinityPolicy: Honor
+          nodeTaintsPolicy: Honor
+        - maxSkew: 1
+          whenUnsatisfiable: ScheduleAnyway
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:      
+              {{- include "blocky.labels" . | nindent 14 }}
+          nodeAffinityPolicy: Honor
+          nodeTaintsPolicy: Honor
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups:
+        - 568
+        sysctls:
+        - name: net.ipv4.ip_unprivileged_port_start
+          value: "53"
+      hostUsers: true
+      containers:
+        - name: release-name-blocky
+          image: spx01/blocky:v0.22
+          imagePullPolicy: IfNotPresent
+          tty: false
+          stdin: false
+          ports:
+            - name: dnstcp
+              containerPort: 53
+              protocol: TCP
+              hostPort: null
+            - name: dnsudp
+              containerPort: 53
+              protocol: UDP
+              hostPort: null
+          volumeMounts:
+            - name: tc-config
+              mountPath: /app/config.yml
+              readOnly: true
+              subPath: config.yml
+          
+          {{- if .Values.resources }}
+          resources: {{ .Values.resources | toYaml | nindent 12 }}
+          {{- end }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 568
+            runAsGroup: 568
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+              drop:
+                - ALL
+          env:
+            - name: "TZ"
+              value: "UTC"
+      volumes:
+        - name: tc-config
+          configMap:
+            name: {{ include "blocky.fullname" . }}-config
+            optional: false
