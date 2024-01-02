@@ -31,13 +31,13 @@ spec:
             - name: LLDAP_JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "lldap.fullname" . }}-credentials
+                  name: {{ include "lldap.fullname" . }}-jwt
                   key: jwt-secret
             - name: LLDAP_LDAP_USER_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "lldap.fullname" . }}-credentials
-                  key: admin-pass
+                  name: {{ include "lldap.fullname" . }}-initial-password
+                  key: password
             - name: TZ
               value: UTC
           ports:
