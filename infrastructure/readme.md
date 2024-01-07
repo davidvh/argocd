@@ -22,6 +22,12 @@ Cert-Manager is one of the few external Helm charts. It creates CRDs in the clus
 
 The current design uses Cloudflare as the Certificate Issuer, though Cert-Manager does support other options.
 
+## CloudNative Postgresql Operator
+
+The CloudNative Postgresql Operator allows the dynamic provisioning and management of Postgresql databases.
+
+When a service requires a database it can define the requirements and load the connection secret to connect to the created database.
+
 ## LLDAP
 
 LLDAP is a simplified LDAP provider. This allows centralized storage of credentials that can be used by other services to authenticate access. This LDAP provider will be used as the backend whereever possible, so that usernames and passowrds should be automatically kept in sync for all of the hosted services.
@@ -34,8 +40,9 @@ NGINX is the Ingress provider, and is one of the few external Helm charts. Combi
 
 Traefik is another popular choice. NGINX was chosen instead because Traefik has a bug integrating with ArgoCD where the Ingresses always appear to be 'Progressing'.
 
-## Secrets-Generator
+## Secrets-Generator and Secrets-Reflector
 
-One of the greatest challenges working with Kubernetes is how to manage secrets. Secrets-Generator handles one of these issues by allowing the creation of random secrets.
+One of the greatest challenges working with Kubernetes is how to manage secrets. Secrets-Generator handles one of these issues by allowing the creation of random secrets, and Secrets-Reflector allows these secrets to be shared to other namespaces.
 
-Services which need to create passwords (e.g. a frontend that uses a backend SQL database) can use this application to define random secrets, which will then be stored in Kubernetes and can be shared to other services. This avoids the need to manually define secrets for backends hosted on the cluster.
+Services which need to create passwords (e.g. a frontend that uses a backend SQL database) can use Secrets-Generator attributes to define random secrets, which will then be stored in Kubernetes and can be shared to other services. This avoids the need to manually define secrets for backends hosted on the cluster.  
+Services which need to securily access other deployed services can use Secrets-Reflector attributes to read secrets from other namespaces into their own namespace.  
