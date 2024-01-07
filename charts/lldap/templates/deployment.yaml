@@ -42,6 +42,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "lldap.fullname" . }}-db-app
+                  key: uri
             - name: TZ
               value: UTC
           ports:
