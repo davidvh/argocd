@@ -38,6 +38,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "lldap.fullname" . }}-initial-password
                   key: password
+            - name: LLDAP_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lldap.fullname" . }}-db-app
             - name: TZ
               value: UTC
           ports:
