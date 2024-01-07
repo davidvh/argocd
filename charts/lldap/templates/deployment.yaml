@@ -66,7 +66,3 @@ spec:
             - mountPath: /data
               name: lldap-data
       restartPolicy: Always
-      volumes:
-        - name: lldap-data
-          persistentVolumeClaim:
-            claimName: {{ include "lldap.fullname" . }}-data
