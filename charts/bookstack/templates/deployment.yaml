@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bookstack.fullname" . }}
+  labels:
+    {{- include "bookstack.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "bookstack.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "bookstack.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "bookstack.fullname" . }}
+          image: linuxserver/bookstack:{{ .Chart.AppVersion }}
+          ports:
+            - name: web
+              containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 10
+          readinessProbe:
+            tcpSocket:
+              port: web
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 10
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.fullname" . }}-db-app
+                  key: host
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.fullname" . }}-db-app
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.fullname" . }}-db-app
+                  key: password
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.fullname" . }}-db-app
+                  key: dbname
+          volumeMounts:
+            - mountPath: "/config"
+              name: config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "bookstack.fullname" . }}-data

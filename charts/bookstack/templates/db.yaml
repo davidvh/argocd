@@ -1,0 +1,16 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "bookstack.fullname" . }}-db
+  labels:
+    {{- include "bookstack.labels" . | nindent 4 }}
+spec:
+  instances: 1
+  storage:
+    size: 1Gi
+
+  managed:
+    roles:
+    - name: bookstack
+      createdb: true
+      login: true

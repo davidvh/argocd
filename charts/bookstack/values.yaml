@@ -1,0 +1,5 @@
+service:
+  name: bookstack
+
+ingress:
+  domainName: example.com

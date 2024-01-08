@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "bookstack.fullname" . }}
+  labels:
+    {{- include "bookstack.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+spec:
+  tls:
+    - hosts:
+        - '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      secretName: cert-{{ .Values.service.name }}
+  rules:
+    - host: '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.name }}
+                port:
+                  name: web
