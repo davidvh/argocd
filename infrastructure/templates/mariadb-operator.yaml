@@ -7,7 +7,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: {{ .Values.destination.project }}
-    source:
+  source:
     repoURL: 'https://mariadb-operator.github.io/mariadb-operator'
     targetRevision: 0.24.0
     chart: mariadb-operator
