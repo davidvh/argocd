@@ -22,17 +22,21 @@ Cert-Manager is one of the few external Helm charts. It creates CRDs in the clus
 
 The current design uses Cloudflare as the Certificate Issuer, though Cert-Manager does support other options.
 
-## CloudNative Postgresql Operator
+## CloudNative Postgresql Operator and Mariadb Operator
 
-The CloudNative Postgresql Operator allows the dynamic provisioning and management of Postgresql databases.
+The CloudNative Postgresql Operator allows the dynamic provisioning and management of Postgresql databases. The MariaDB Operator allows the dynamic provisioning and management of MariaDB databases. These should cover most database requirements.
 
-When a service requires a database it can define the requirements and load the connection secret to connect to the created database.
+When a service requires a database it can define the requirements and load the connection secret to connect to the created database. Although databases can be manually provisioned, the operators provide useful features to expose the databases as services and manage user credentials.
 
 ## LLDAP
 
 LLDAP is a simplified LDAP provider. This allows centralized storage of credentials that can be used by other services to authenticate access. This LDAP provider will be used as the backend whereever possible, so that usernames and passowrds should be automatically kept in sync for all of the hosted services.
 
 There are other options for LDAP providers, but LLDAP was chosen because it has low system requirements and is easy to understand.
+
+## Authelia
+
+Authelia is a simple SSO provider supporting LDAP as a backend. It can provide basic authentication requirements for any service, by adding annotations to the ingress, and can serve as an OpenID provider for services that support it. Combined with LLDAP these can allow sharing of most credentials.
 
 ## NGINX
 

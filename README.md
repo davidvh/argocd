@@ -29,7 +29,21 @@ Argo can add additional applications, including charts from this repo.
 
 ### Authoring
 
-Helm supports previewing helm outputs. VSCode also includes this preview capabitliy, and some authoring tools, in a Kubernetes extension. 
+Helm supports previewing helm outputs. VSCode also includes this preview capabitliy, and some authoring tools, in a Kubernetes extension.
+
+When I'm authoring a new application I will:
+1. (optional) If the application already has a Helm chart, add this to Argo but do not deploy it. The preview of the deployment may be helpful to identify the resources that need to be created.
+2. Create a new Helm chart, make the initial configuration (often using the existing charts for reference), and push the changes to github.
+3. Add the new Helm chart to Argo. Edit and push changes until the deployed service is working as expected.
+4. Add the new Helm chart to the apps list so that it can be completely managed by Argo.
+
+### Important Kubernetes resources
+
+Refer to official Kubernetes documentation for the most current information.
+
+- Deployment/DaemonSet: The Container that will be deployed, how it should be started, how it should be monitored, etc. It is often the most complicated component to define.
+- Service: A selector to search Kubernetes for the Container and how any ports should be exposed within the Kubernetes cluster.
+- Ingress: Expose an HTTP/HTTPS service outside of the cluster. This is also the point where HTTPS signing takes place via Cert-Manager and sometimes includes annotations to configure authentication requirements to access services. Note that this is only works for HTTPS connections.
 
 ### Troubleshooting
 
