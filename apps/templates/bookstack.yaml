@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: whoami
+  name: bookstack
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,14 +10,14 @@ spec:
   source:
     repoURL: "https://github.com/davidvh/argocd.git"
     targetRevision: HEAD
-    path: charts/whoami
+    path: charts/bookstack
     helm:
       parameters:
         - name: ingress.domainName
           value: {{ .Values.host.domainName }}
   destination:
     server: {{ .Values.destination.server }}
-    namespace: whoami
+    namespace: bookstack
   syncPolicy:
     automated:
       prune: true
