@@ -4,6 +4,11 @@ metadata:
   name: {{ include "lldap.fullname" . }}-service
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "LLDAP"
+    gethomepage.dev/description: "User management"
+    gethomepage.dev/group: "Backend"
+    gethomepage.dev/icon: "mdi-account-group"
 spec:
   tls:
     - hosts:

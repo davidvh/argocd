@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: 'https://jameswynn.github.io/helm-charts'
+    targetRevision: 1.2.3
+    helm:
+      values: |-
+        config:
+          bookmarks:
+            {{- .Values.homepage.bookmarks | toYaml | nindent 12 }}
+          services:
+            {{- .Values.homepage.externalServices | toYaml | nindent 12 }}
+          widgets:
+            {{- .Values.homepage.widgets | toYaml | nindent 12 }}
+          kubernetes:
+            mode: cluster
+          settings:
+
+        serviceAccount:
+          create: true
+          name: homepage
+
+        enableRbac: true
+
+        ingress:
+          main:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: cloudflare-issuer
+              gethomepage.dev/enabled: "true"
+              gethomepage.dev/name: "Homepage"
+              gethomepage.dev/description: "This homepage"
+              gethomepage.dev/group: "Infrastructure"
+              gethomepage.dev/icon: "homepage.png"
+            hosts:
+              - host: homepage.{{ .Values.host.domainName }}
+                paths:
+                  - path: /
+                    pathType: Prefix
+            tls:
+              - hosts:
+                  - homepage.{{ .Values.host.domainName }}
+                secretName: homepage-ssl
+    chart: homepage
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: homepage
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -15,6 +15,25 @@ cloudflare:
 ldap:
   dn: "dc=example,dc=com"
 
+homepage:
+  bookmarks:
+    - Developer:
+        - Github:
+            - abbr: davidvh
+              href: https://github.com/davidvh/argocd
+  externalServices:
+    - Network:
+        - Slashdot:
+            href: https://www.slashdot.org
+            description: Slashdot
+        - TrueNAS:
+            href: https://www.truenas.com/
+            description: TrueNAS
+  widgets:
+    - search:
+        provider: duckduckgo
+        target: _blank
+
 destination:
   server: https://kubernetes.default.svc
   project: default
