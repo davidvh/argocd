@@ -32,26 +32,19 @@ spec:
             periodSeconds: 10
             failureThreshold: 10
           env:
+            - name: APP_URL
+              value: 'https://{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
             - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "bookstack.fullname" . }}-db-app
-                  key: host
+              value: {{ include "bookstack.fullname" . }}-db
             - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "bookstack.fullname" . }}-db-app
-                  key: username
+              value: bookstack
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "bookstack.fullname" . }}-db-app
+                  name: {{ include "bookstack.fullname" . }}-db-user
                   key: password
             - name: DB_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "bookstack.fullname" . }}-db-app
-                  key: dbname
+              value: bookstack
           volumeMounts:
             - mountPath: "/config"
               name: config

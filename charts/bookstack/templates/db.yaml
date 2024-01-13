@@ -1,16 +1,31 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: MariaDB
 metadata:
   name: {{ include "bookstack.fullname" . }}-db
   labels:
     {{- include "bookstack.labels" . | nindent 4 }}
 spec:
-  instances: 1
-  storage:
-    size: 1Gi
+  rootPasswordSecretKeyRef:
+    name: {{ include "bookstack.fullname" . }}-db-root
+    key: password
 
-  managed:
-    roles:
-    - name: bookstack
-      createdb: true
-      login: true
+  username: bookstack
+  passwordSecretKeyRef:
+    name: {{ include "bookstack.fullname" . }}-db-user
+    key: password
+  database: bookstack
+
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 1Gi
+    accessModes:
+      - ReadWriteOnce
+
+  myCnf: |
+    [mariadb]
+    bind-address=*
+    default_storage_engine=InnoDB
+    binlog_format=row
+    innodb_autoinc_lock_mode=2
+    max_allowed_packet=256M
