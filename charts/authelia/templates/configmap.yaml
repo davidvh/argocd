@@ -78,6 +78,8 @@ data:
       ban_time: 5m
 
     storage:
+      local:
+        path: /db/db.sqlite3
     notifier:
       disable_startup_check: false
       filesystem:
