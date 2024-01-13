@@ -1,5 +1,5 @@
 apiVersion: v2
-name: Authelia
+name: authelia
 description: A Helm chart for Authelia
 type: application
 
