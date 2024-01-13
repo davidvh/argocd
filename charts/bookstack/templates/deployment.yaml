@@ -61,7 +61,7 @@ spec:
             - name: LDAP_USER_FILTER
               value: (&(uid=$${user}))
             - name: LDAP_VERSION
-              value: 3
+              value: '3'
             - name: LDAP_ID_ATTRIBUTE
               value: uid
             - name: LDAP_EMAIL_ATTRIBUTE
@@ -69,7 +69,7 @@ spec:
             - name: LDAP_DISPLAY_NAME_ATTRIBUTE
               value: cn
             - name: LDAP_START_TLS
-              value: false
+              value: 'false'
           volumeMounts:
             - mountPath: "/config"
               name: config

@@ -15,6 +15,10 @@ spec:
       parameters:
         - name: ingress.domainName
           value: {{ .Values.host.domainName }}
+        - name: ldap.dn
+          value: {{ .Values.ldap.dn }}
+        - name: ldap.host
+          value: {{ .Values.ldap.host }}
   destination:
     server: {{ .Values.destination.server }}
     namespace: bookstack

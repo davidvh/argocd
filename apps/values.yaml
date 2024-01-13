@@ -1,6 +1,10 @@
 host:
   domainName: example.com
 
+ldap:
+  dn: 'DC=example,DC=com'
+  host: ldap://ldap
+
 destination:
   server: https://kubernetes.default.svc
   project: default
