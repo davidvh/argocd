@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.service.name }}
-          image: traefik/whoami
+          image: traefik/whoami:{{ .Chart.AppVersion }}
           ports:
             - name: web
               containerPort: 80
