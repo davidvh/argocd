@@ -5,8 +5,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
     nginx.ingress.kubernetes.io/auth-method: GET
-    nginx.ingress.kubernetes.io/auth-url: http://authelia.default.svc.cluster.local/api/verify
-    nginx.ingress.kubernetes.io/auth-signin: https://authelia.{{ .Values.ingress.domainName }}?rm=$request_method
+    nginx.ingress.kubernetes.io/auth-url: http://{{ .Values.auth.host }}.{{ .Values.auth.namespace }}.svc.cluster.local/api/verify
+    nginx.ingress.kubernetes.io/auth-signin: https://{{ .Values.auth.host }}.{{ .Values.ingress.domainName }}?rm=$request_method
     nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
     nginx.ingress.kubernetes.io/auth-snippet: |
       proxy_set_header X-Forwarded-Method $request_method;

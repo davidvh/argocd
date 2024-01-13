@@ -3,3 +3,7 @@ service:
 
 ingress:
   domainName: example.com
+
+auth:
+  host: authelia
+  namespace: authelia
