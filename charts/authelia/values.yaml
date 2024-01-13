@@ -1,0 +1,10 @@
+service:
+  name: authelia
+
+ingress:
+  domainName: example.com
+
+ldap:
+  user: admin
+  dn: 'DC=example,DC=com'
+  host: ldap://ldap

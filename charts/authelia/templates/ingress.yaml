@@ -1,15 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: whoami
+  name: {{ include "authelia.fullname" . }}
+  labels:
+    {{- include "authelia.labels" . | nindent 4 }}
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
-    nginx.ingress.kubernetes.io/auth-method: GET
-    nginx.ingress.kubernetes.io/auth-url: http://authelia.default.svc.cluster.local/api/verify
-    nginx.ingress.kubernetes.io/auth-signin: https://authelia.{{ .Values.ingress.domainName }}?rm=$request_method
-    nginx.ingress.kubernetes.io/auth-response-headers: Remote-User,Remote-Name,Remote-Groups,Remote-Email
-    nginx.ingress.kubernetes.io/auth-snippet: |
-      proxy_set_header X-Forwarded-Method $request_method;
 spec:
   tls:
     - hosts:
@@ -25,4 +21,4 @@ spec:
               service:
                 name: {{ .Values.service.name }}
                 port:
-                  name: web
+                  name: http
