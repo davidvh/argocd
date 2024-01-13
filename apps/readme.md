@@ -10,6 +10,7 @@ This is a wiki service.
 ### Setup
 
 1. Deploy as normal
+1. (TODO) Manually add the bookstack LDAP user account to the LDAP service with read-only and password management permissions.
 2. Log in with one of the LDAP accounts. You will have read-only permissions.
 3. Temporarily edit the deployment to set `AUTH_METHOD=standard`.
 4. Log in to Bookstack using the default login credentials.

@@ -45,6 +45,31 @@ spec:
                   key: password
             - name: DB_DATABASE
               value: bookstack
+            - name: AUTH_METHOD
+              value: ldap
+            - name: LDAP_SERVER
+              value: {{ .Values.ldap.host }}
+            - name: LDAP_BASE_DN
+              value: ou=people,{{ .Values.ldap.dn }}
+            - name: LDAP_DN
+              value: uid={{ .Values.ldap.user }},ou=people,{{ .Values.ldap.dn }}
+            - name: LDAP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bookstack.fullname" . }}-ldap-user
+                  key: password
+            - name: LDAP_USER_FILTER
+              value: (&(uid=$${user}))
+            - name: LDAP_VERSION
+              value: 3
+            - name: LDAP_ID_ATTRIBUTE
+              value: uid
+            - name: LDAP_EMAIL_ATTRIBUTE
+              value: mail
+            - name: LDAP_DISPLAY_NAME_ATTRIBUTE
+              value: cn
+            - name: LDAP_START_TLS
+              value: false
           volumeMounts:
             - mountPath: "/config"
               name: config

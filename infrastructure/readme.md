@@ -38,6 +38,11 @@ There are other options for LDAP providers, but LLDAP was chosen because it has 
 
 Authelia is a simple SSO provider supporting LDAP as a backend. It can provide basic authentication requirements for any service, by adding annotations to the ingress, and can serve as an OpenID provider for services that support it. Combined with LLDAP these can allow sharing of most credentials.
 
+### Setup
+
+1. Deploy as normal
+1. (TODO) Manually add the authelia LDAP user account to the LDAP service with read-only and password management permissions.
+
 ## NGINX
 
 NGINX is the Ingress provider, and is one of the few external Helm charts. Combined with Ingress Resources and Certificates created for each service, it allows for HTTPS access.

@@ -3,3 +3,8 @@ service:
 
 ingress:
   domainName: example.com
+
+ldap:
+  user: bookstack
+  dn: 'DC=example,DC=com'
+  host: ldap://ldap
