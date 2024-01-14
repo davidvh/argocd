@@ -15,6 +15,9 @@ cloudflare:
 ldap:
   dn: "dc=example,dc=com"
 
+smtp:
+  user: user
+
 homepage:
   bookmarks:
     - Developer:
