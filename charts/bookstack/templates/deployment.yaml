@@ -32,6 +32,8 @@ spec:
             periodSeconds: 10
             failureThreshold: 10
           env:
+            - name: MAIL_HOST
+              value: {{ .Values.smtp.host }}
             - name: APP_URL
               value: 'https://{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
             - name: DB_HOST

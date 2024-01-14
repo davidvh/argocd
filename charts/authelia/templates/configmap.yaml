@@ -82,6 +82,10 @@ data:
         path: /db.sqlite3
     notifier:
       disable_startup_check: false
-      filesystem:
-        # TODO: smtp
-        filename: /config/notification.txt
+      smtp:
+        host: {{ .Values.smtp.host }}
+        port: {{ .Values.smtp.port }}
+        sender: authelia@{{ .Values.ingress.domainName }}
+        # Disable TLS since we're using an internal SMTP service
+        disable_require_tls: true
+        disable_starttls: true

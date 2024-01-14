@@ -4,6 +4,10 @@ service:
 ingress:
   domainName: example.com
 
+smtp:
+  host: maildev-smtp.maildev.svc.cluster.local
+  port: 25
+
 ldap:
   user: authelia
   dn: 'DC=example,DC=com'

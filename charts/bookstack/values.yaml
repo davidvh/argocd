@@ -4,6 +4,9 @@ service:
 ingress:
   domainName: example.com
 
+smtp:
+  host: maildev-smtp.maildev.svc.cluster.local
+
 ldap:
   user: bookstack
   dn: 'DC=example,DC=com'
