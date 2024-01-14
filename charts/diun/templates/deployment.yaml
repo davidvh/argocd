@@ -43,7 +43,7 @@ spec:
               value: '{{ .Values.smtp.ssl }}'
             - name: DIUN_NOTIF_MAIL_FROM
               value: {{ .Values.smtp.from }}
-            - name: DIUN_NOTIF_MAIL_TO_0
+            - name: DIUN_NOTIF_MAIL_TO
               value: {{ .Values.smtp.to }}
           volumeMounts:
             - mountPath: "/data"
