@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          command:
-            - /usr/src/app/bin/maildev
+          args:
+            - '--auto-relay'
           env:
             - name: MAILDEV_DISABLE_WEB
               value: 'true'
@@ -53,27 +53,12 @@ spec:
                   key: password
             - name: MAILDEV_OUTGOING_SECURE
               value: 'true'
-          args:
-            - '--verbose'
-            - '--outgoing-secure'
-            - '--auto-relay'
           image: 'maildev/maildev:{{ .Chart.AppVersion }}'
           imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 1080
           ports:
-            - containerPort: 1080
-              name: web
-              protocol: TCP
             - containerPort: 1025
               name: smtp
               protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 1080
           resources: {}
           securityContext: {}
           volumeMounts:
