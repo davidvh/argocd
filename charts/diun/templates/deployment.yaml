@@ -33,7 +33,13 @@ spec:
               value: "0 */6 * * *"
             - name: DIUN_WATCH_JITTER
               value: "30s"
+            - name: DIUN_DEFAULTS_WATCHREPO
+              value: 'true'
+            - name: DIUN_DEFAULTS_INCLUDETAGS
+              value: '^(latest)|(stable)$'
             - name: DIUN_PROVIDERS_KUBERNETES
+              value: "true"
+            - name: DIUN_PROVIDERS_KUBERNETES_WATCHBYDEFAULT
               value: "true"
             - name: DIUN_NOTIF_MAIL_HOST
               value: {{ .Values.smtp.host }}
