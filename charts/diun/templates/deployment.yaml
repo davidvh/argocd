@@ -54,6 +54,5 @@ spec:
         # For production usage, you should consider using PV/PVC instead(or simply using storage like NAS)
         # For more details, please see https://kubernetes.io/docs/concepts/storage/volumes/
         - name: "data"
-          hostPath:
-            path: "/data"
-            type: Directory
+          persistentVolumeClaim:
+            claimName: {{ include "diun.fullname" . }}-data
