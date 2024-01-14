@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "diun.fullname" . }}
+  labels:
+    {{- include "diun.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "diun.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "diun.labels" . | nindent 8 }}
+      annotations:
+        diun.enable: "true"
+    spec:
+      serviceAccountName: {{ .Chart.Name }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: ghcr.io/crazy-max/diun:{{ .Chart.AppVersion }}
+          imagePullPolicy: Always
+          args: ["serve"]
+          env:
+            - name: LOG_LEVEL
+              value: "info"
+            - name: LOG_JSON
+              value: "false"
+            - name: DIUN_WATCH_WORKERS
+              value: "20"
+            - name: DIUN_WATCH_SCHEDULE
+              value: "0 */6 * * *"
+            - name: DIUN_WATCH_JITTER
+              value: "30s"
+            - name: DIUN_PROVIDERS_KUBERNETES
+              value: "true"
+            - name: DIUN_NOTIF_MAIL_HOST
+              value: {{ .Values.smtp.host }}
+            - name: DIUN_NOTIF_MAIL_PORT
+              value: '{{ .Values.smtp.port }}'
+            - name: DIUN_NOTIF_MAIL_SSL
+              value: '{{ .Values.smtp.ssl }}'
+            - name: DIUN_NOTIF_MAIL_FROM
+              value: {{ .Values.smtp.from }}
+            - name: DIUN_NOTIF_MAIL_TO_0
+              value: {{ .Values.smtp.to }}
+          volumeMounts:
+            - mountPath: "/data"
+              name: "data"
+      restartPolicy: Always
+      volumes:
+        # Set up a data directory for diun
+        # For production usage, you should consider using PV/PVC instead(or simply using storage like NAS)
+        # For more details, please see https://kubernetes.io/docs/concepts/storage/volumes/
+        - name: "data"
+          hostPath:
+            path: "/data"
+            type: Directory

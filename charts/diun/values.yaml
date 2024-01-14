@@ -1,0 +1,6 @@
+smtp:
+  host: maildev-smtp.maildev.svc.cluster.local
+  port: 25
+  ssl: false
+  from: diun@example.com
+  to: diun@example.com
