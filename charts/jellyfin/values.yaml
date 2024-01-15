@@ -3,3 +3,17 @@ service:
 
 ingress:
   domainName: example.com
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: media
+#   nfs:
+#     server: my-nfs-server.example.com
+#     path: /my-nfs-volume
+#     readOnly: true
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: media
+#   mountPath: "/media"
+#   readOnly: true

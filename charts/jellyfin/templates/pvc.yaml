@@ -2,36 +2,25 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jellyfin-config
+  name: {{ include "jellyfin.fullname" . }}-config
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: microk8s-hostpath  
   resources:
     requests:
-      storage: 500Mi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jellyfin-media 
-spec:
-  capacity:
-    storage: 1Mi
-  accessModes:
-  - ReadWriteMany
-  nfs: 
-    path: "/volume1/media"
-    server: <ADDRESS OF NFS SERVER>
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jellyfin-media
+  name: {{ include "jellyfin.fullname" . }}-cache
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: ""
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
