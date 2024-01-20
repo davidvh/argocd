@@ -19,6 +19,13 @@ spec:
         - name: {{ .Chart.Name }}
           image: "quay.io/linuxserver.io/jellyfin:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "{{ .Values.user.uid }}"
+            - name: PGID
+              value: "{{ .Values.user.gid }}"
+            - name: JELLYFIN_PublishedServerUrl
+              value: "https://{{ .Values.service.name }}.{{ .Values.ingress.domainName }}"
           ports:
             - containerPort: 8096
               name: http
@@ -36,7 +43,7 @@ spec:
               name: "config"
             - mountPath: "/cache"
               name: "cache"
-            {{ range .Values.localMounts }}
+            {{ range .Values.smbMounts }}
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
             {{ end }}
@@ -47,8 +54,8 @@ spec:
         - name: "cache"
           persistentVolumeClaim:
             claimName: {{ include "jellyfin.fullname" . }}-cache
-        {{ range .Values.localMounts }}
+        {{ range .Values.smbMounts }}
         - name: {{ .name }}
-          hostPath:
-            path: '{{ .localPath }}'
+          persistentVolumeClaim:
+            claimName: {{ .name }}
         {{ end }}

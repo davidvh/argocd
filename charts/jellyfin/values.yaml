@@ -4,7 +4,18 @@ service:
 ingress:
   domainName: example.com
 
-localMounts: []
+user:
+  uid: 911
+  gid: 911
+
+smbSecrets: []
+  # - name: my-smb-secret
+  #   username: jellyfin
+
+smbMounts: []
   # - name: media
-  #   localPath: /mnt/media
+  #   size: 50Gi
+  #   host: my-nfs-server.example.com
+  #   share: my-nfs-volume
+  #   secret: my-smb-secret
   #   mountPath: "/media"
