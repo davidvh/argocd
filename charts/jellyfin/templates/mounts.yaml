@@ -1,46 +1,19 @@
-{{ range .Values.smbSecrets }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ .name }}
-  annotations:
-    secret-generator.v1.mittwald.de/autogenerate: password
-stringData:
-  username: {{ .username }}
-{{ end }}
-{{ range .Values.smbMounts }}
+{{ range .Values.localMounts }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ .name }}
 spec:
-  storageClassName: smb
   capacity:
     storage: {{ .size }}
+  volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+  - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  mountOptions:
-    - dir_mode=0777
-    - file_mode=0777
-    - uid=911
-    - gid=911
-    - noperm
-    - mfsymlinks
-    - cache=strict
-    - noserverino  # required to prevent data corruption
-  csi:
-    driver: smb.csi.k8s.io
-    readOnly: false
-    volumeHandle: '{{ $.Release.Namespace }}/{{ .name }}'  # make sure it's a unique id in the cluster
-    volumeAttributes:
-      source: '//{{ .host }}/{{ .share }}'
-    nodeStageSecretRef:
-      name: {{ .secret }}
-      namespace: {{ $.Release.Namespace }}
-
+  storageClassName: local-storage
+  local:
+    path: {{ .localPath }}
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
