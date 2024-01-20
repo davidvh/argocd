@@ -31,7 +31,7 @@ kind: Secret
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "jellyfin.labels" . | nindent 4 }}
+    {{- include "jellyfin.labels" $ | nindent 4 }}
   annotations:
     secret-generator.v1.mittwald.de/autogenerate: password
 stringData:
@@ -44,7 +44,7 @@ kind: PersistentVolume
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "jellyfin.labels" . | nindent 4 }}
+    {{- include "jellyfin.labels" $ | nindent 4 }}
 spec:
   storageClassName: smb
   capacity:
@@ -77,7 +77,7 @@ apiVersion: v1
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "jellyfin.labels" . | nindent 4 }}
+    {{- include "jellyfin.labels" $ | nindent 4 }}
 spec:
   storageClassName: smb
   volumeName: {{ .name }}
