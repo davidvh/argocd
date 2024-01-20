@@ -49,6 +49,6 @@ spec:
             claimName: {{ include "jellyfin.fullname" . }}-cache
         {{ range .Values.localMounts }}
         - name: {{ .name }}
-          persistentVolumeClaim:
-            claimName: {{ .name }}
+          hostPath:
+            path: '{{ .localPath }}'
         {{ end }}

@@ -6,6 +6,5 @@ ingress:
 
 localMounts: []
   # - name: media
-  #   size: 50Gi
   #   localPath: /mnt/media
   #   mountPath: "/media"
