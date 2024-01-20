@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authelia
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/authelia
+    helm:
+      parameters:
+        - name: ingress.domainName
+          value: {{ .Values.host.domainName }}
+        - name: ldap.dn
+          value: {{ .Values.ldap.dn | quote }}
+        - name: ldap.host
+          value: 'ldap://lldap-service.lldap.svc.cluster.local'
+        - name: ldap.user
+          value: authelia
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: authelia
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
