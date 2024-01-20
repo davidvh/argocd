@@ -36,7 +36,7 @@ spec:
               name: "config"
             - mountPath: "/cache"
               name: "cache"
-            {{ range .Values.nfsMounts }}
+            {{ range .Values.smbMounts }}
             - mountPath: {{ .mountPath }}
               name: {{ .name }}
             {{ end }}
@@ -47,9 +47,8 @@ spec:
         - name: "cache"
           persistentVolumeClaim:
             claimName: {{ include "jellyfin.fullname" . }}-cache
-        {{ range .Values.nfsMounts }}
+        {{ range .Values.smbMounts }}
         - name: {{ .name }}
-          nfs:
-            server: {{ .server }}
-            path: {{ .hostPath }}
+          persistentVolumeClaim:
+            {{ .name }}
         {{ end }}

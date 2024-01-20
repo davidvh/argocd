@@ -1,0 +1,50 @@
+{{ range .Values.smbSecrets }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .name }}
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: password
+stringData:
+  username: {{ .username }}
+{{ end }}
+{{ range .Values.smbMounts }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .name }}
+spec:
+  capacity:
+    storage: {{ .size }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - vers=3.0
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: '{{ $.Release.Namespace }}/{{ .name }}'  # make sure it's a unique id in the cluster
+    volumeAttributes:
+      source: '//{{ .host }}/{{ .share }}'
+    nodeStageSecretRef:
+      name: {{ .secret }}
+      namespace: {{ $.Release.Namespace }}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .name }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .size }}
+  volumeName: {{ .name }}
+{{ end }}
