@@ -50,5 +50,5 @@ spec:
         {{ range .Values.smbMounts }}
         - name: {{ .name }}
           persistentVolumeClaim:
-            {{ .name }}
+            claimName: {{ .name }}
         {{ end }}
