@@ -8,3 +8,12 @@ ldap:
 destination:
   server: https://kubernetes.default.svc
   project: default
+
+jellyfin:
+  user:
+    uid: 911
+    gid: 911
+  smbSecrets:
+    - name: truenas-jellyfin
+      username: jellyfin
+  smbMounts: []

@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "jellyfin.fullname" . }}
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "jellyfin"
+    gethomepage.dev/description: "Jellyfin media server"
+    gethomepage.dev/group: "Media"
+    gethomepage.dev/icon: "jellyfin.svg"
+spec:
+  tls:
+    - hosts:
+        - '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      secretName: cert-{{ .Values.service.name }}
+  rules:
+    - host: '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.name }}
+                port:
+                  name: http

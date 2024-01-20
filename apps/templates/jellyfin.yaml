@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: "https://github.com/davidvh/argocd.git"
+    targetRevision: HEAD
+    path: charts/jellyfin
+    helm:
+      values: |-
+        ingress:
+          domainName: {{ .Values.host.domainName }}
+        {{ .Values.jellyfin | toYaml | nindent 8 }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: jellyfin
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true

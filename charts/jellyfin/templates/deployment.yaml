@@ -1,44 +1,61 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyfin
+  name: {{ include "jellyfin.fullname" . }}
+  labels:
+    {{- include "jellyfin.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: jellyfin
-  replicas: 1
+      {{- include "jellyfin.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
   template:
     metadata:
-      name: jellyfin
       labels:
-        app: jellyfin
+        {{- include "jellyfin.labels" . | nindent 8 }}
     spec:
       containers:
-      - name: jellyfin
-        image: jellyfin/jellyfin
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8096
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /data/media
-          name: jellyfin-media
-          readOnly: True
-        - mountPath: /config
-          name: jellyfin-config
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 2000Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
-      restartPolicy: Always
+        - name: {{ .Chart.Name }}
+          image: "quay.io/linuxserver.io/jellyfin:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "{{ .Values.user.uid }}"
+            - name: PGID
+              value: "{{ .Values.user.gid }}"
+            - name: JELLYFIN_PublishedServerUrl
+              value: "https://{{ .Values.service.name }}.{{ .Values.ingress.domainName }}"
+          ports:
+            - containerPort: 8096
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          volumeMounts:
+            - mountPath: "/config"
+              name: "config"
+            - mountPath: "/cache"
+              name: "cache"
+            {{ range .Values.smbMounts }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{ end }}
       volumes:
-      - name: jellyfin-media
-        persistentVolumeClaim:
-          claimName: jellyfin-media
-      - name: jellyfin-config
-        persistentVolumeClaim:
-          claimName: jellyfin-config
+        - name: "config"
+          persistentVolumeClaim:
+            claimName: {{ include "jellyfin.fullname" . }}-config
+        - name: "cache"
+          persistentVolumeClaim:
+            claimName: {{ include "jellyfin.fullname" . }}-cache
+        {{ range .Values.smbMounts }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .name }}
+        {{ end }}
