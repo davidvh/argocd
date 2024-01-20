@@ -16,6 +16,7 @@ kind: PersistentVolume
 metadata:
   name: {{ .name }}
 spec:
+  storageClassName: smb
   capacity:
     storage: {{ .size }}
   accessModes:
@@ -41,10 +42,11 @@ apiVersion: v1
 metadata:
   name: {{ .name }}
 spec:
+  storageClassName: smb
+  volumeName: {{ .name }}
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: {{ .size }}
-  volumeName: {{ .name }}
 {{ end }}
