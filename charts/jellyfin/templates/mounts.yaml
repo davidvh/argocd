@@ -25,7 +25,12 @@ spec:
   mountOptions:
     - dir_mode=0777
     - file_mode=0777
-    - vers=3.0
+    - uid=911
+    - gid=911
+    - noperm
+    - mfsymlinks
+    - cache=strict
+    - noserverino  # required to prevent data corruption
   csi:
     driver: smb.csi.k8s.io
     readOnly: false
