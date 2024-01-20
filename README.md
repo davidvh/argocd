@@ -44,6 +44,7 @@ Refer to official Kubernetes documentation for the most current information.
 - Deployment/DaemonSet: The Container that will be deployed, how it should be started, how it should be monitored, etc. It is often the most complicated component to define.
 - Service: A selector to search Kubernetes for the Container and how any ports should be exposed within the Kubernetes cluster.
 - Ingress: Expose an HTTP/HTTPS service outside of the cluster. This is also the point where HTTPS signing takes place via Cert-Manager and sometimes includes annotations to configure authentication requirements to access services. Note that this is only works for HTTPS connections.
+- Volumes, PersistentVolumes, PersistentVolumeClaims: Storage. Ideally services should use SQL connections, but some require their own storage. Most storage, include storage of SQL servers, is tightly tied to the computer running the service. Sometimes it is necessary for multiple services to share files (e.g. videos, music, books, etc.). In this case Samba shares allow for easy management and sharing of files with good access control.
 
 ### Troubleshooting
 
