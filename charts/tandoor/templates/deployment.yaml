@@ -1,0 +1,189 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tandoor.fullname" . }}
+  labels:
+    {{- include "tandoor.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "tandoor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tandoor.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      initContainers:
+      - name: {{ include "tandoor.fullname" . }}-init
+        env:
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: recipes
+                key: secret-key
+          - name: DB_ENGINE
+            value: django.db.backends.postgresql
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: host
+          - name: POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: port
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: username
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: dbname
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: password
+        image: vabene1111/recipes:{{ .Chart.AppVersion }}
+        imagePullPolicy: Always
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          source venv/bin/activate
+          echo "Updating database"
+          python manage.py migrate
+          python manage.py collectstatic_js_reverse
+          python manage.py collectstatic --noinput
+          echo "Setting media file attributes"
+          chown -R 65534:65534 /opt/recipes/mediafiles
+          find /opt/recipes/mediafiles -type d | xargs -r chmod 755
+          find /opt/recipes/mediafiles -type f | xargs -r chmod 644
+          echo "Done"
+        volumeMounts:
+        - mountPath: /opt/recipes/mediafiles
+          name: media
+          # mount as subPath due to lost+found on ext4 pvc
+          subPath: files
+        - mountPath: /opt/recipes/staticfiles
+          name: static
+          # mount as subPath due to lost+found on ext4 pvc
+          subPath: files
+      containers:
+      - name: {{ include "tandoor.fullname" . }}-nginx
+        image: nginx:{{ .Values.service.nginxVersion }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 80
+            protocol: TCP
+            name: http
+          - containerPort: 8080
+            protocol: TCP
+            name: gunicorn
+        volumeMounts:
+          - mountPath: /media
+            name: media
+            # mount as subPath due to lost+found on ext4 pvc
+            subPath: files
+          - mountPath: /static
+            name: static
+            # mount as subPath due to lost+found on ext4 pvc
+            subPath: files
+          - name: nginx-config
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx-config
+            readOnly: true
+      - name: recipes
+        image: vabene1111/recipes:{{ .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /opt/recipes/venv/bin/gunicorn
+          - -b
+          - :8080
+          - --access-logfile
+          - "-"
+          - --error-logfile
+          - "-"
+          - --log-level
+          - INFO
+          - recipes.wsgi
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 30
+        volumeMounts:
+          - mountPath: /opt/recipes/mediafiles
+            name: media
+            # mount as subPath due to lost+found on ext4 pvc
+            subPath: files
+          - mountPath: /opt/recipes/staticfiles
+            name: static
+            # mount as subPath due to lost+found on ext4 pvc
+            subPath: files
+        env:
+          - name: DEBUG
+            value: "0"
+          - name: ALLOWED_HOSTS
+            value: '*'
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: recipes
+                key: secret-key
+          - name: GUNICORN_MEDIA
+            value: "0"
+          - name: DB_ENGINE
+            value: django.db.backends.postgresql
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: host
+          - name: POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: port
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: username
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: dbname
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-db-app
+                key: password
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "tandoor.fullname" . }}-media
+        - name: static
+          persistentVolumeClaim:
+            claimName: {{ include "tandoor.fullname" . }}-static
+        - name: nginx-config
+          configMap:
+            name: {{ include "tandoor.fullname" . }}-nginx-config
