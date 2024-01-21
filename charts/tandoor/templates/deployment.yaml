@@ -196,6 +196,14 @@ spec:
             value: "1"
           - name: AUTH_LDAP_CACHE_TIMEOUT
             value: "3600"
+          - name: EMAIL_HOST
+            value: "{{ .Values.smtp.host }}"
+          - name: EMAIL_USE_TLS
+            value: "0"
+          - name: EMAIL_USE_SSL
+            value: "0"
+          - name: DEFAULT_FROM_EMAIL
+            value: "tandoor@{{ .Values.ingress.domainName }}"
       volumes:
         - name: media
           persistentVolumeClaim:
