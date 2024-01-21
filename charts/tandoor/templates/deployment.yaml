@@ -23,7 +23,7 @@ spec:
           - name: SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: recipes
+                name: {{ include "tandoor.fullname" . }}-encrypt
                 key: secret-key
           - name: DB_ENGINE
             value: django.db.backends.postgresql
@@ -102,7 +102,7 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx-config
             readOnly: true
-      - name: recipes
+      - name: {{ include "tandoor.fullname" . }}
         image: vabene1111/recipes:{{ .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
         command:
@@ -146,7 +146,7 @@ spec:
           - name: SECRET_KEY
             valueFrom:
               secretKeyRef:
-                name: recipes
+                name: {{ include "tandoor.fullname" . }}-encrypt
                 key: secret-key
           - name: GUNICORN_MEDIA
             value: "0"
