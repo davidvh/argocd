@@ -36,6 +36,15 @@ This is a media player.
 7. Create a new LDAP user account for Jellyfin with read-only and password management permissions.
 8. Configure the LDAP plugin to connect to the LLDAP instance using the created LDAP user (see https://github.com/lldap/lldap/blob/main/example_configs/jellyfin.md).
 
+## Tandoor
+
+This is a recipe and meal planner.
+
+### Setup
+
+1. Deploy as normal
+1. (TODO) Manually add the tandoor LDAP user account to the LDAP service with read-only and password management permissions.
+
 ## Whoami
 
 This is a basic test application to confirm the service and logged-in account.

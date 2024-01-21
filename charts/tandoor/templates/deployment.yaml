@@ -177,6 +177,25 @@ spec:
               secretKeyRef:
                 name: {{ include "tandoor.fullname" . }}-db-app
                 key: password
+          - name: LDAP_AUTH
+            value: "1"
+          - name: AUTH_LDAP_SERVER_URI
+            value: "{{ .Values.ldap.host }}"
+          - name: AUTH_LDAP_BIND_DN
+            value: "uid={{ .Values.ldap.user }},ou=people,{{ .Values.ldap.dn}}"
+          - name: AUTH_LDAP_BIND_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "tandoor.fullname" . }}-ldap-user
+                key: password
+          - name: AUTH_LDAP_USER_SEARCH_BASE_DN
+            value: "ou=people,{{ .Values.ldap.dn}}"
+          - name: AUTH_LDAP_USER_ATTR_MAP
+            value: "{'first_name': 'givenName', 'last_name': 'sn', 'email': 'mail'}"
+          - name: AUTH_LDAP_ALWAYS_UPDATE_USER
+            value: "1"
+          - name: AUTH_LDAP_CACHE_TIMEOUT
+            value: "3600"
       volumes:
         - name: media
           persistentVolumeClaim:
