@@ -1,0 +1,15 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "tandoor.fullname" . }}-db
+  labels:
+    {{- include "tandoor.labels" . | nindent 4 }}
+spec:
+  instances: 1
+  storage:
+    size: 1Gi
+  managed:
+    roles:
+    - name: recipes
+      createdb: true
+      login: true

@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "tandoor.fullname" . }}
+  labels:
+    {{- include "tandoor.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "tandoor"
+    gethomepage.dev/description: "Tandoor Recipe Manager"
+    gethomepage.dev/group: "Organization"
+    gethomepage.dev/icon: "tandoor.svg"
+spec:
+  tls:
+    - hosts:
+        - '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      secretName: cert-{{ .Values.service.name }}
+  rules:
+    - host: '{{ .Values.service.name }}.{{ .Values.ingress.domainName }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.name }}
+                port:
+                  name: gunicorn
+          - path: /media
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.name }}
+                port:
+                  name: http
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.name }}
+                port:
+                  name: http

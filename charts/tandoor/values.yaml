@@ -1,0 +1,14 @@
+service:
+  name: tandoor
+  nginxVersion: 1.25.3
+
+ingress:
+  domainName: example.com
+
+smtp:
+  host: maildev-smtp.maildev.svc.cluster.local
+
+ldap:
+  user: tandoor
+  dn: 'DC=example,DC=com'
+  host: ldap://ldap

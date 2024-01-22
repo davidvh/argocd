@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tandoor
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: "https://github.com/davidvh/argocd.git"
+    targetRevision: HEAD
+    path: charts/tandoor
+    helm:
+      parameters:
+        - name: ingress.domainName
+          value: {{ .Values.host.domainName }}
+        - name: ldap.dn
+          value: {{ .Values.ldap.dn }}
+        - name: ldap.host
+          value: {{ .Values.ldap.host }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: tandoor
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - PrunePropagationPolicy=foreground
+      - CreateNamespace=true
