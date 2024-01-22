@@ -10,7 +10,7 @@ metadata:
     gethomepage.dev/name: "tandoor"
     gethomepage.dev/description: "Tandoor Recipe Manager"
     gethomepage.dev/group: "Organization"
-    gethomepage.dev/icon: "tandoor.svg"
+    gethomepage.dev/icon: "tandoor.png"
 spec:
   tls:
     - hosts:
