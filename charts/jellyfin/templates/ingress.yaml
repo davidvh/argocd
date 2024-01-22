@@ -10,7 +10,7 @@ metadata:
     gethomepage.dev/name: "jellyfin"
     gethomepage.dev/description: "Jellyfin media server"
     gethomepage.dev/group: "Media"
-    gethomepage.dev/icon: "jellyfin.svg"
+    gethomepage.dev/icon: "jellyfin.png"
 spec:
   tls:
     - hosts:

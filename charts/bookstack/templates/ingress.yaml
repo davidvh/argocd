@@ -10,7 +10,7 @@ metadata:
     gethomepage.dev/name: "Bookstack"
     gethomepage.dev/description: "Bookstack wiki"
     gethomepage.dev/group: "Organization"
-    gethomepage.dev/icon: "bookstack.svg"
+    gethomepage.dev/icon: "bookstack.png"
 spec:
   tls:
     - hosts:
