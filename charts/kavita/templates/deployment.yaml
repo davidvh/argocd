@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kavita.fullname" . }}
+  labels:
+    {{- include "kavita.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "kavita.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "kavita.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "quay.io/linuxserver.io/kavita:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "{{ .Values.user.uid }}"
+            - name: PGID
+              value: "{{ .Values.user.gid }}"
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          volumeMounts:
+            - mountPath: "/config"
+              name: "config"
+            {{ range .Values.smbMounts }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{ end }}
+      volumes:
+        - name: "config"
+          persistentVolumeClaim:
+            claimName: {{ include "kavita.fullname" . }}-config
+        {{ range .Values.smbMounts }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .name }}
+        {{ end }}
