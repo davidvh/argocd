@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "quay.io/linuxserver.io/kavita:{{ .Chart.AppVersion }}"
+          image: "lscr.io/linuxserver/kavita:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
@@ -30,11 +30,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /health
+              path: /
               port: http
           readinessProbe:
             httpGet:
-              path: /health
+              path: /
               port: http
           volumeMounts:
             - mountPath: "/config"
