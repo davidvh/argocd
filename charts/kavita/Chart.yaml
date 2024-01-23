@@ -1,5 +1,5 @@
 apiVersion: v2
-name: jellyfin
+name: kavita
 description: A Helm chart for Kavita
 type: application
 

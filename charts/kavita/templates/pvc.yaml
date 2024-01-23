@@ -19,8 +19,6 @@ metadata:
   name: {{ .name }}
   labels:
     {{- include "kavita.labels" $ | nindent 4 }}
-  annotations:
-    secret-generator.v1.mittwald.de/autogenerate: password
 stringData:
   username: {{ .username }}
 {{ end }}
