@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "komga.fullname" . }}-config
+  labels:
+    {{- include "komga.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+{{ range .Values.smbSecrets }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "komga.labels" $ | nindent 4 }}
+stringData:
+  username: {{ .username }}
+{{ end }}
+{{ range .Values.smbMounts }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "komga.labels" $ | nindent 4 }}
+spec:
+  storageClassName: smb
+  capacity:
+    storage: {{ .size }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid={{ $.Values.user.uid }}
+    - gid={{ $.Values.user.gid }}
+    - noperm
+    - mfsymlinks
+    - cache=strict
+    - noserverino  # required to prevent data corruption
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: '{{ $.Release.Namespace }}/{{ .name }}'  # make sure it's a unique id in the cluster
+    volumeAttributes:
+      source: '//{{ .host }}/{{ .share }}'
+    nodeStageSecretRef:
+      name: {{ .secret }}
+      namespace: {{ $.Release.Namespace }}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "komga.labels" $ | nindent 4 }}
+spec:
+  storageClassName: smb
+  volumeName: {{ .name }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .size }}
+{{ end }}
