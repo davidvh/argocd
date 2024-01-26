@@ -18,6 +18,8 @@ spec:
       securityContext:
         runAsUser: {{ .Values.user.uid }}
         runAsGroup: {{ .Values.user.gid }}
+        fsGroup: {{ .Values.user.gid }}
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: {{ .Chart.Name }}
           image: "ghcr.io/gotson/komga:{{ .Chart.AppVersion }}"
