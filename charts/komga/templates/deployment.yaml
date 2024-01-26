@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "komga.fullname" . }}
+  labels:
+    {{- include "komga.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "komga.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "komga.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        runAsUser: {{ .Values.user.uid }}
+        runAsGroup: {{ .Values.user.gid }}
+        fsGroup: {{ .Values.user.gid }}
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "ghcr.io/gotson/komga:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 25600
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          startupProbe:
+            failureThreshold: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /
+              port: http
+          volumeMounts:
+            - mountPath: "/config"
+              name: "config"
+            {{ range .Values.smbMounts }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{ end }}
+      volumes:
+        - name: "config"
+          persistentVolumeClaim:
+            claimName: {{ include "komga.fullname" . }}-config
+        {{ range .Values.smbMounts }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ .name }}
+        {{ end }}

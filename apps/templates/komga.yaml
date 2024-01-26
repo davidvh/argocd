@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: komga
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: "https://github.com/davidvh/argocd.git"
+    targetRevision: HEAD
+    path: charts/komga
+    helm:
+      values: |-
+        ingress:
+          domainName: {{ .Values.host.domainName }}
+        {{ .Values.komga | toYaml | nindent 8 }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: komga
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

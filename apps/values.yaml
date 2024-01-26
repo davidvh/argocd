@@ -17,3 +17,12 @@ jellyfin:
     - name: truenas-jellyfin
       username: jellyfin
   smbMounts: []
+
+komga:
+  user:
+    uid: 1000
+    gid: 1000
+  smbSecrets:
+  - name: truenas-komga
+    username: komga
+  smbMounts: []

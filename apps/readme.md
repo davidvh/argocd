@@ -36,6 +36,21 @@ This is a media player.
 7. Create a new LDAP user account for Jellyfin with read-only and password management permissions.
 8. Configure the LDAP plugin to connect to the LLDAP instance using the created LDAP user (see https://github.com/lldap/lldap/blob/main/example_configs/jellyfin.md).
 
+## Komga
+
+This is an ebook reader.
+
+### Setup
+1. Configure Samba shares in Truenas for your books.
+2. Create a user account for Komga to access the Samba shares. Rembmer the username and the UID that Truenas assigns.
+3. Deploy Komga
+     - Configure the UID and GID to match the Truenas user.
+     - Configure the smbSecrets with the Truenas username
+     - Configure the smbMounts to mount the Samba shares
+4. (TODO) Manually update the created SMB secret with the correct password
+5. Login to the Komga service. Configure an admin user and add the Samba shares.
+6. (TODO) Configure Authelia access (see https://www.authelia.com/integration/openid-connect/komga/)
+
 ## Tandoor
 
 This is a recipe and meal planner.
