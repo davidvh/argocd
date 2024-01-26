@@ -24,11 +24,6 @@ spec:
         - name: {{ .Chart.Name }}
           image: "ghcr.io/gotson/komga:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
-          env:
-            - name: PUID
-              value: ""
-            - name: PGID
-              value: ""
           ports:
             - containerPort: 25600
               name: http
