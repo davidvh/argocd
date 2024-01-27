@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "wgeasy.fullname" . }}-service
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "WireGuard"
+    gethomepage.dev/description: "Remote access"
+    gethomepage.dev/group: "Backend"
+    gethomepage.dev/icon: "wireguard.png"
+spec:
+  tls:
+    - hosts:
+        - 'wireguard.{{ .Values.domainName }}'
+      secretName: {{ include "wgeasy.fullname" . }}-ssl
+  rules:
+    - host: 'wireguard.{{ .Values.domainName }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "wgeasy.fullname" . }}-ui
+                port:
+                  name: http

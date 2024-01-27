@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wgeasy.fullname" . }}
+  labels:
+    {{- include "wgeasy.labels" . | nindent 4 }}
+spec:
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "wgeasy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "wgeasy.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "wgeasy.fullname" . }}
+          image: ghcr.io/wg-easy/wg-easy:{{ .Chart.AppVersion }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 51821
+              protocol: TCP
+            - name: wireguard
+              containerPort: 51820
+              protocol: UDP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/wireguard
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - SYS_MODULE
+              drop:
+                - ALL
+          env:
+            - name: WG_HOST
+              value: {{ .Values.externalUrl }}
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wgeasy.fullname" . }}-admin-password
+                  key: password
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ include "wgeasy.fullname" . }}-config
+
