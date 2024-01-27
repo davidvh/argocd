@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "inadyn.fullname" . }}
+  labels:
+    {{- include "inadyn.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "inadyn.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "inadyn.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "troglobit/inadyn:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            exec:
+              command:
+              - catinadyn
+              - --check-config
+          volumeMounts:
+            - name: conf
+              mountPath: /etc
+              subPath: inadyn.conf
+              readOnly: true
+      volumes:
+        - name: conf
+          secret:
+            secretName: {{ include "inadyn.fullname" . }}-conf
