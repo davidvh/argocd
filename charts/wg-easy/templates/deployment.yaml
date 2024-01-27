@@ -31,6 +31,7 @@ spec:
             - name: data
               mountPath: /etc/wireguard
           securityContext:
+            privileged: true
             capabilities:
               add:
                 - NET_ADMIN
@@ -40,6 +41,8 @@ spec:
           env:
             - name: WG_HOST
               value: {{ .Values.externalUrl }}
+            - name: WG_DEFAULT_DNS
+              value: {{ .Values.dns }}
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:

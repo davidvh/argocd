@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wg-easy
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/wg-easy
+    helm:
+      values: |-
+        externalUrl: {{ .Values.host.domainName }}
+        domainName: {{ .Values.host.domainName }}
+        dns: {{ .Values.host.address }}
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: wgeasy
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
