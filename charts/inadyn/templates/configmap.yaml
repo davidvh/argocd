@@ -5,11 +5,22 @@ metadata:
   labels:
     {{- include "inadyn.labels" . | nindent 4 }}
 data:
-  inadyn.conf.j2: |-
+  inadyn.conf.py: |-
+    import os
+    import sys
+
+    name = os.environ["COMPUTERNAME"]
+    user = os.environ["CLOUDFLARE_USER"]
+    token = os.environ["CLOUDFLARE_TOKEN"]
+
+    generated = f"""
     # Create a unique custom API token with the following permissions:
     # -> Zone.Zone - Read, Zone.DNS - Edit.
-    provider cloudflare.com {
-        username = "{{ "{{ " }}environ('CLOUDFLARE_USER'){{ " }}" }}"
-        password = "{{ "{{ " }}environ('CLOUDFLARE_TOKEN'){{ " }}" }}"
+    provider cloudflare.com {{ "{{" }}
+        username = "{user}"
+        password = "{token}"
         hostname = {{ .Values.domainName }}
-    }
+    {{ "}}" }}
+    """
+    with open(sys.argv[1], 'w') as output:
+        output.write(generated)

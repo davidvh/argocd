@@ -15,11 +15,12 @@ spec:
     spec:
       initContainers:
         - name: {{ .Chart.Name }}-createconfig
-          image: dinutac/jinja2docker:latest
+          image: python:alpine3.19
           imagePullPolicy: IfNotPresent
           args:
-            - /templates/inadyn.conf.j2
-            - --format=json > /out/inadyn.conf
+            - -m
+            - /templates/inadyn.conf.py
+            - /out/inadyn.conf
           env:
             - name: CLOUDFLARE_USER
               valueFrom:
