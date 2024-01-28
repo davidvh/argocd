@@ -50,7 +50,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc
-              subPath: inadyn.conf
       volumes:
         - name: config
           emptyDir: {}
