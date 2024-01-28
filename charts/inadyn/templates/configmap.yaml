@@ -6,6 +6,15 @@ metadata:
     {{- include "inadyn.labels" . | nindent 4 }}
 data:
   ddclient.conf.py: |-
+    import os
+    import sys
+
+    print("Reading variables")
+    user = os.environ["CLOUDFLARE_USER"]
+    token = os.environ["CLOUDFLARE_TOKEN"]
+
+    print("Generating output")
+    generated = f"""
     protocol=cloudflare
     use=web
     server=www.cloudflare.com
@@ -14,6 +23,10 @@ data:
     password={token}
     zone={{ .Values.domainName }}
     {{ .Values.domainName }}
+    """
+    print("Writing to " + sys.argv[1])
+    with open(sys.argv[1], 'w') as output:
+        output.write(generated)
   inadyn.conf.py: |-
     import os
     import sys
