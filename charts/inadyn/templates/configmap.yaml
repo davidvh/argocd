@@ -15,11 +15,12 @@ data:
 
     print("Generating output")
     generated = f"""
+    use=web, web=api.ipify.org/
     protocol=cloudflare
-    use=web
-    server=www.cloudflare.com
+    # See https://developers.cloudflare.com/api/
+    server=api.cloudflare.com/client/v4
     ssl=yes
-    login={user}
+    login=token
     password={token}
     zone={{ .Values.domainName }}
     {{ .Values.domainName }}

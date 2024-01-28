@@ -42,15 +42,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: "lscr.io/linuxserver/ddclient:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
-          command:
-            - ddclient
-            - -daemon=60
-            - -debug
-            - -verbose
-            - -noquiet
           volumeMounts:
             - name: config
-              mountPath: /etc/ddclient
+              mountPath: /config
+              readOnly: true
       volumes:
         - name: config
           emptyDir: {}
