@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "inadyn.fullname" . }}-config
+  labels:
+    {{- include "inadyn.labels" . | nindent 4 }}
+data:
+  inadyn.conf.j2: |-
+    # Create a unique custom API token with the following permissions:
+    # -> Zone.Zone - Read, Zone.DNS - Edit.
+    provider cloudflare.com {
+        username = "{{ "{{ " }}environ('CLOUDFLARE_USER'){{ " }}" }}"
+        password = "{{ "{{ " }}environ('CLOUDFLARE_TOKEN'){{ " }}" }}"
+        hostname = {{ .Values.domainName }}
+    }

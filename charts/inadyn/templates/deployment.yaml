@@ -13,6 +13,32 @@ spec:
       labels:
         {{- include "inadyn.labels" . | nindent 8 }}
     spec:
+      initContainers:
+        - name: {{ .Chart.Name }}-createconfig
+          image: dinutac/jinja2docker:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - /templates/inadyn.conf.j2
+            - --format=json
+            - ">"
+            - /out/inadyn.conf
+          env:
+            - name: CLOUDFLARE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "inadyn.fullname" . }}-cloudflare
+                  key: user
+            - name: CLOUDFLARE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "inadyn.fullname" . }}-cloudflare
+                  key: api-token
+          volumeMounts:
+            - name: conf
+              mountPath: /out
+            - name: conftemplate
+              mountPath: /templates
+              readOnly: true
       containers:
         - name: {{ .Chart.Name }}
           image: "troglobit/inadyn:{{ .Chart.AppVersion }}"
@@ -23,11 +49,15 @@ spec:
               - catinadyn
               - --check-config
           volumeMounts:
-            - name: conf
+            - name: config
               mountPath: /etc
               subPath: inadyn.conf
-              readOnly: true
       volumes:
-        - name: conf
-          secret:
-            secretName: {{ include "inadyn.fullname" . }}-conf
+        - name: config
+          emptyDir: {}
+        - name: configtemplate
+          configMap:
+            name: {{ include "inadyn.fullname" . }}-config
+            items:
+              - key: inadyn.conf.j2
+                path: inadyn.conf.j2
