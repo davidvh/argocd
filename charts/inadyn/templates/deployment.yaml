@@ -42,8 +42,6 @@ spec:
         - name: {{ .Chart.Name }}
           image: "lscr.io/linuxserver/ddclient:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
-          args:
-            - -verbose
           volumeMounts:
             - name: config
               mountPath: /config
