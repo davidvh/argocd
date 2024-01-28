@@ -19,9 +19,7 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - /templates/inadyn.conf.j2
-            - --format=json
-            - ">"
-            - /out/inadyn.conf
+            - --format=json > /out/inadyn.conf
           env:
             - name: CLOUDFLARE_USER
               valueFrom:
