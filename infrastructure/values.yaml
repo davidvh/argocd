@@ -10,7 +10,6 @@ localNetwork:
 
 cloudflare:
   email: email@email.com
-  secret: TODO
 
 ldap:
   dn: "dc=example,dc=com"

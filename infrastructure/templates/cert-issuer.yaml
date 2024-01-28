@@ -4,9 +4,11 @@ kind: Secret
 metadata:
   name: cloudflare-api-token
   namespace: cert-manager
+  annotations:
+    secret-generator.v1.mittwald.de/autogenerate: api-token
 type: Opaque
 stringData:
-  api-token: {{ .Values.cloudflare.secret }}
+  email: {{ .Values.cloudflare.email }}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
