@@ -45,7 +45,7 @@ spec:
           readinessProbe:
             exec:
               command:
-              - catinadyn
+              - inadyn
               - --check-config
           volumeMounts:
             - name: config
