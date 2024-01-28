@@ -44,7 +44,7 @@ spec:
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: config
-              mountPath: /etc
+              mountPath: /config
       volumes:
         - name: config
           emptyDir: {}
