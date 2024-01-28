@@ -9,10 +9,11 @@ data:
     import os
     import sys
 
-    name = os.environ["COMPUTERNAME"]
+    print("Reading variables")
     user = os.environ["CLOUDFLARE_USER"]
     token = os.environ["CLOUDFLARE_TOKEN"]
 
+    print("Generating output")
     generated = f"""
     # Create a unique custom API token with the following permissions:
     # -> Zone.Zone - Read, Zone.DNS - Edit.
@@ -22,5 +23,6 @@ data:
         hostname = {{ .Values.domainName }}
     {{ "}}" }}
     """
+    print("Writing to " + sys.argv[1])
     with open(sys.argv[1], 'w') as output:
         output.write(generated)

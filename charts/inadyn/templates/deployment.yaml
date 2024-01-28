@@ -17,8 +17,8 @@ spec:
         - name: {{ .Chart.Name }}-createconfig
           image: python:alpine3.19
           imagePullPolicy: IfNotPresent
-          args:
-            - -m
+          command:
+            - python
             - /templates/inadyn.conf.py
             - /out/inadyn.conf
           env:
