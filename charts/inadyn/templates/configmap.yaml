@@ -5,6 +5,15 @@ metadata:
   labels:
     {{- include "inadyn.labels" . | nindent 4 }}
 data:
+  ddclient.conf.py: |-
+    protocol=cloudflare
+    use=web
+    server=www.cloudflare.com
+    ssl=yes
+    login={user}
+    password={token}
+    zone={{ .Values.domainName }}
+    {{ .Values.domainName }}
   inadyn.conf.py: |-
     import os
     import sys
