@@ -34,7 +34,7 @@ spec:
                   name: {{ include "inadyn.fullname" . }}-cloudflare
                   key: api-token
           volumeMounts:
-            - name: conf
+            - name: config
               mountPath: /out
             - name: conftemplate
               mountPath: /templates
