@@ -33,7 +33,6 @@ data:
     import sys
 
     print("Reading variables")
-    user = os.environ["CLOUDFLARE_USER"]
     token = os.environ["CLOUDFLARE_TOKEN"]
 
     print("Generating output")

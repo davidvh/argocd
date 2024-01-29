@@ -22,11 +22,6 @@ spec:
             - /templates/inadyn.conf.py
             - /out/inadyn.conf
           env:
-            - name: CLOUDFLARE_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "inadyn.fullname" . }}-cloudflare
-                  key: user
             - name: CLOUDFLARE_TOKEN
               valueFrom:
                 secretKeyRef:
