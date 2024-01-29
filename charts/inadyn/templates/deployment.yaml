@@ -19,8 +19,8 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - python
-            - /templates/ddclient.conf.py
-            - /out/ddclient.conf
+            - /templates/inadyn.conf.py
+            - /out/inadyn.conf
           env:
             - name: CLOUDFLARE_USER
               valueFrom:
@@ -40,11 +40,17 @@ spec:
               readOnly: true
       containers:
         - name: {{ .Chart.Name }}
-          image: "lscr.io/linuxserver/ddclient:{{ .Chart.AppVersion }}"
+          image: "troglobit/inadyn:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
+          readinessProbe:
+            exec:
+              command:
+              - inadyn
+              - --check-config
           volumeMounts:
             - name: config
-              mountPath: /config
+              mountPath: /etc/inadyn.conf
+              subPath: inadyn.conf
       volumes:
         - name: config
           emptyDir: {}
@@ -52,5 +58,5 @@ spec:
           configMap:
             name: {{ include "inadyn.fullname" . }}-config
             items:
-              - key: ddclient.conf.py
-                path: ddclient.conf.py
+              - key: inadyn.conf.py
+                path: inadyn.conf.py

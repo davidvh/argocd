@@ -41,8 +41,8 @@ data:
     # Create a unique custom API token with the following permissions:
     # -> Zone.Zone - Read, Zone.DNS - Edit.
     provider cloudflare.com {{ "{{" }}
-        username = "{user}"
-        password = "{token}"
+        username = {{ .Values.domainName }}
+        password = {token}
         hostname = {{ .Values.domainName }}
     {{ "}}" }}
     """
