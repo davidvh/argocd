@@ -12,8 +12,11 @@ spec:
     repoURL: 'https://github.com/davidvh/argocd.git'
     path: charts/inadyn
     helm:
-      values: |-
-        domainName: {{ .Values.host.domainName }}
+      parameters:
+        - name: domainName
+          value: {{ .Values.host.domainName }}
+        - name: user
+          value: {{ .Values.cloudflare.email }}
     targetRevision: HEAD
   destination:
     server: {{ .Values.destination.server }}
