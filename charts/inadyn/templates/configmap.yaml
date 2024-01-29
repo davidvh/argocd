@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "inadyn.fullname" . }}-config
+  labels:
+    {{- include "inadyn.labels" . | nindent 4 }}
+data:
+  ddclient.conf.py: |-
+    import os
+    import sys
+
+    print("Reading variables")
+    user = os.environ["CLOUDFLARE_USER"]
+    token = os.environ["CLOUDFLARE_TOKEN"]
+
+    print("Generating output")
+    generated = f"""
+    use=web, web=api.ipify.org/
+    protocol=cloudflare
+    # See https://developers.cloudflare.com/api/
+    server=api.cloudflare.com/client/v4
+    ssl=yes
+    login=token
+    password={token}
+    zone={{ .Values.domainName }}
+    {{ .Values.domainName }}
+    """
+    print("Writing to " + sys.argv[1])
+    with open(sys.argv[1], 'w') as output:
+        output.write(generated)
+  inadyn.conf.py: |-
+    import os
+    import sys
+
+    print("Reading variables")
+    user = os.environ["CLOUDFLARE_USER"]
+    token = os.environ["CLOUDFLARE_TOKEN"]
+
+    print("Generating output")
+    generated = f"""
+    # Create a unique custom API token with the following permissions:
+    # -> Zone.Zone - Read, Zone.DNS - Edit.
+    provider cloudflare.com {{ "{{" }}
+        username = {{ .Values.domainName }}
+        password = {token}
+        hostname = {{ .Values.domainName }}
+    {{ "}}" }}
+    """
+    print("Writing to " + sys.argv[1])
+    with open(sys.argv[1], 'w') as output:
+        output.write(generated)

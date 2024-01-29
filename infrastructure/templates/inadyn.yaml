@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: inadyn
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    source:
+    repoURL: 'https://github.com/davidvh/argocd.git'
+    path: charts/inadyn
+    helm:
+      parameters:
+        - name: domainName
+          value: {{ .Values.host.domainName }}
+        - name: user
+          value: {{ .Values.cloudflare.email }}
+    targetRevision: HEAD
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: inadyn
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

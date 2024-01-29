@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wgeasy.fullname" . }}
+  labels:
+    {{- include "wgeasy.labels" . | nindent 4 }}
+spec:
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "wgeasy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "wgeasy.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "wgeasy.fullname" . }}
+          image: ghcr.io/wg-easy/wg-easy:{{ .Chart.AppVersion }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 51821
+              protocol: TCP
+            - name: wireguard
+              containerPort: 51820
+              protocol: UDP
+          volumeMounts:
+            - name: data
+              mountPath: /etc/wireguard
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+                - SYS_MODULE
+              drop:
+                - ALL
+          env:
+            - name: WG_HOST
+              value: {{ .Values.externalUrl }}
+            - name: WG_DEFAULT_DNS
+              value: {{ .Values.dns }}
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wgeasy.fullname" . }}-admin-password
+                  key: password
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          startupProbe:
+            failureThreshold: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /
+              port: http
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "wgeasy.fullname" . }}-data
+

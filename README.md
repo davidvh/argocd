@@ -15,13 +15,16 @@ ArgoCD is an excellent tool for this, since it helps to visualize the Kubernetes
 1. In TrueNAS, enable Applications
 2. In TrueNAS, configure the UI to run on a different port (e.g. 444)
 3. Configure TrueNAS to use a static IP address. This will be necessary to route your domain to the created services.
-4. Purchase a Cloudflare domain domain and create a token for accessing it (TODO)
-5. Open the TrueNAS console and use the `scripts/update_argocd.sh` commands to install argocd and enable temporary port forwarding.
-6. Manually edit your local c:\windows\system32\drivers\etc\hosts file to direct `argocd.<yourdomain>` to the TrueNAS IP.
-7. Connect to `https://argocd.<yourdomain>`
-8. Add the infrastructure chart from this repo. This will create an ingress for argocd and create a DNS server that can be used to forward your domain requests to the server from inside your network.  
-   Note that you will need to manually restart the argocd-server deployment to update the configuration.
-9. Update your router to use the TrueNAS IP address as the DNS resolver.
+4. Purchase a Cloudflare domain domain and create a token for accessing it, with both READ and WRITE permissions (TODO)
+5. Edit the DNS settings for your domain in Cloudflare and add an A entry for the root (TODO)
+6. Open the TrueNAS console and use the `scripts/update_argocd.sh` commands to install argocd and enable temporary port forwarding.
+7. Manually edit your local c:\windows\system32\drivers\etc\hosts file to direct `argocd.<yourdomain>` to the TrueNAS IP.
+8. Connect to `https://argocd.<yourdomain>`
+9. Add the infrastructure chart from this repo and manually update the cloudflare API secret with the generated token.  
+   This will create an ingress for argocd and create a DNS server that can be used to forward your domain requests to the server from inside your network.  
+   Note that you will need to manually restart the argocd-server deployment to update the configuration to enable the ingress to work correctly.
+10. Manually update the cloudflare API secret in the inadyn project with the generated token.
+11. Update your router to use the TrueNAS IP address as the DNS resolver.
 
 ## Apps
 
