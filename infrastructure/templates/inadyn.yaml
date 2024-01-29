@@ -13,7 +13,7 @@ spec:
     path: charts/inadyn
     helm:
       values: |-
-        domainName: {{ .Values.domainName }}
+        domainName: {{ .Values.host.domainName }}
     targetRevision: HEAD
   destination:
     server: {{ .Values.destination.server }}
