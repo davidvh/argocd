@@ -1,0 +1,12 @@
+domainName: example.com
+
+storage:
+  name: ceph
+  nodes: 1
+  replicas: 1
+  metadataReplicas: 1
+  failureDomain: osd # host
+
+destination:
+  server: https://kubernetes.default.svc
+  project: default
