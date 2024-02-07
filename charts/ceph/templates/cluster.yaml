@@ -45,10 +45,10 @@ spec:
 apiVersion: ceph.rook.io/v1
 kind: CephBlockPool
 metadata:
-  name: {{ .Values.storage.name }}-blocks
+  name: {{ .Values.storage.name }}-mgr
   namespace: rook-ceph
 spec:
-  name: blocks
+  name: .mgr
   replicated:
     size: {{ .Values.storage.replicas }}
     requireSafeReplicaSize: false
