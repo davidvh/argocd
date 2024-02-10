@@ -11,10 +11,10 @@ spec:
     allowUnsupported: true
   mon:
     count: {{ ceil (divf .Values.storage.nodes 3) }}
-    allowMultiplePerNode: false
+    allowMultiplePerNode: true
   mgr:
     count: {{ ceil (divf .Values.storage.nodes 3) }}
-    allowMultiplePerNode: false
+    allowMultiplePerNode: true
   dashboard:
     enabled: true
   crashCollector:
