@@ -1,0 +1,17 @@
+rook-ceph:
+  enableDiscoveryDaemon: true
+  csi:
+    provisionerReplicas: 1
+    serviceMonitor:
+      enabled: true
+  monitoring:
+    enabled: true
+
+domainName: example.com
+
+storage:
+  name: ceph
+  nodes: 1
+  replicas: 1
+  metadataReplicas: 1
+  failureDomain: osd # host

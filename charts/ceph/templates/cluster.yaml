@@ -1,0 +1,95 @@
+---
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: {{ .Values.storage.name }}-cluster
+  namespace: rook-ceph
+spec:
+  dataDirHostPath: /var/lib/rook
+  cephVersion:
+    image: quay.io/ceph/ceph:v18
+    allowUnsupported: true
+  mon:
+    count: {{ ceil (divf .Values.storage.nodes 3) }}
+    allowMultiplePerNode: true
+  mgr:
+    count: {{ ceil (divf .Values.storage.nodes 3) }}
+    allowMultiplePerNode: true
+  dashboard:
+    enabled: true
+  crashCollector:
+    disable: true
+  storage:
+    useAllNodes: true
+    useAllDevices: true
+  monitoring:
+    enabled: true
+  healthCheck:
+    daemonHealth:
+      mon:
+        interval: 45s
+        timeout: 600s
+  priorityClassNames:
+    all: system-node-critical
+    mgr: system-cluster-critical
+  disruptionManagement:
+    managePodBudgets: true
+  cephConfig:
+    global:
+      osd_pool_default_size: "1"
+      mon_warn_on_pool_no_redundancy: "false"
+      bdev_flock_retry: "20"
+      bluefs_buffered_io: "false"
+      mon_data_avail_warn: "10"
+---
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: {{ .Values.storage.name }}-mgr
+  namespace: rook-ceph
+spec:
+  name: .mgr
+  replicated:
+    size: {{ .Values.storage.replicas }}
+    requireSafeReplicaSize: false
+---
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
+metadata:
+  name: {{ .Values.storage.name }}-filesystem
+  namespace: rook-ceph # namespace:cluster
+spec:
+  metadataPool:
+    replicated:
+      size: {{ .Values.storage.metadataReplicas }} # TODO
+      requireSafeReplicaSize: false
+  dataPools:
+    - name: replicated
+      failureDomain: {{ .Values.storage.failureDomain }}
+      replicated:
+        size: {{ .Values.storage.replicas }}
+        requireSafeReplicaSize: false
+  preserveFilesystemOnDelete: false
+  metadataServer:
+    activeCount: 1 # TODO
+    activeStandby: true
+---
+# create default csi subvolume group
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystemSubVolumeGroup
+metadata:
+  name: {{ .Values.storage.name }}-filesystem-csi
+  namespace: rook-ceph
+spec:
+  # The name of the subvolume group. If not set, the default is the name of the subvolumeGroup CR.
+  name: csi
+  # filesystemName is the metadata name of the CephFilesystem CR where the subvolume group will be created
+  filesystemName: {{ .Values.storage.name }}-filesystem
+  # reference https://docs.ceph.com/en/latest/cephfs/fs-volumes/#pinning-subvolumes-and-subvolume-groups
+  # only one out of (export, distributed, random) can be set at a time
+  # by default pinning is set with value: distributed=1
+  # for disabling default values set (distributed=0)
+  pinning:
+    distributed: 1            # distributed=<0, 1> (disabled=0)
+    # export:                 # export=<0-256> (disabled=-1)
+    # random:                 # random=[0.0, 1.0](disabled=0.0)

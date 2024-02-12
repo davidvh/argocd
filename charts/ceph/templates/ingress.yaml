@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ceph-mgr-dashboard
+  namespace: rook-ceph
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      proxy_ssl_verify off;
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "Ceph"
+    gethomepage.dev/description: "Storage management"
+    gethomepage.dev/group: "Backend"
+    gethomepage.dev/icon: "TODO"
+spec:
+  tls:
+    - hosts:
+        - 'ceph.{{ .Values.domainName }}'
+      secretName: ceph-mgr-dashboard-ssl
+  rules:
+    - host: 'ceph.{{ .Values.domainName }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rook-ceph-mgr-dashboard
+                port:
+                  name: https-dashboard
