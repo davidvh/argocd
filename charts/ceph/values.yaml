@@ -10,6 +10,7 @@ rook-ceph:
 domainName: example.com
 
 storage:
+  blockname: ".mgr"
   name: ceph
   nodes: 1
   replicas: 1

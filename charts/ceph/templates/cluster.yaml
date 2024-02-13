@@ -48,7 +48,7 @@ metadata:
   name: {{ .Values.storage.name }}-mgr
   namespace: rook-ceph
 spec:
-  name: .mgr
+  name: {{ .Values.storage.blockname }}
   replicated:
     size: {{ .Values.storage.replicas }}
     requireSafeReplicaSize: false
