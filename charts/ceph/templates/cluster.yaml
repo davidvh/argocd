@@ -17,6 +17,7 @@ spec:
     allowMultiplePerNode: true
   dashboard:
     enabled: true
+    ssl: false
   crashCollector:
     disable: true
   storage:

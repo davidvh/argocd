@@ -4,9 +4,6 @@ metadata:
   name: ceph-mgr-dashboard
   namespace: rook-ceph
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      proxy_ssl_verify off;
     cert-manager.io/cluster-issuer: cloudflare-issuer
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: "Ceph"
@@ -28,4 +25,4 @@ spec:
               service:
                 name: rook-ceph-mgr-dashboard
                 port:
-                  name: https-dashboard
+                  name: http-dashboard
