@@ -2,12 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "blocky.fullname" . }}-dnstcp
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
   labels:
     {{- include "blocky.labels" . | nindent 4 }}
     service.name: "dnstcp"
 spec:
   type: LoadBalancer
   publishNotReadyAddresses: false
+  loadBalancerIP: {{ .Values.host.address }}
   ports:
     - name: dnstcp
       port: 53
@@ -20,12 +23,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "blocky.fullname" . }}-dnsudp
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
   labels:
     {{- include "blocky.labels" . | nindent 4 }}
     service.name: "dnsudp"
 spec:
   type: LoadBalancer
   publishNotReadyAddresses: false
+  loadBalancerIP: {{ .Values.host.address }}
   ports:
     - name: dnsudp
       port: 53

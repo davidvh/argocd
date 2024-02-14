@@ -13,6 +13,9 @@ spec:
     path: charts/blocky
     helm:
       values: |-
+        host:
+          address:
+            {{ .Values.host.address }}
         customDns:
           {{ .Values.host.domainName }}: {{ .Values.host.address }}
           {{- if .Values.localNetwork.staticHosts }}

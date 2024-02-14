@@ -17,6 +17,10 @@ spec:
           value: "true"
         - name: controller.allowSnippetAnnotations
           value: 'true'
+        - name: controller.service.loadBalancerIP
+          value: {{ .Values.host.address }}
+        - name: controller.service.annotations.metallb\.universe\.tf/allow-shared-ip
+          value: cluster
   destination:
     server: {{ .Values.destination.server }}
     namespace: ingress-nginx
