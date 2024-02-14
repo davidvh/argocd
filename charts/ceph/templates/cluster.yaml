@@ -23,7 +23,7 @@ spec:
     useAllNodes: true
     useAllDevices: true
   monitoring:
-    enabled: true
+    enabled: false
   healthCheck:
     daemonHealth:
       mon:
@@ -52,7 +52,7 @@ spec:
   failureDomain: {{ .Values.storage.failureDomain }}
   replicated:
     size: {{ .Values.storage.replicas }}
-    requireSafeReplicaSize: false
+    # requireSafeReplicaSize: false
 ---
 apiVersion: ceph.rook.io/v1
 kind: CephFilesystem
@@ -69,11 +69,11 @@ spec:
       failureDomain: {{ .Values.storage.failureDomain }}
       replicated:
         size: {{ .Values.storage.replicas }}
-        requireSafeReplicaSize: false
-  preserveFilesystemOnDelete: false
+        # requireSafeReplicaSize: false
+  preserveFilesystemOnDelete: true
   metadataServer:
     activeCount: 1 # TODO
-    activeStandby: false
+    # activeStandby: false
 ---
 # create default csi subvolume group
 apiVersion: ceph.rook.io/v1
