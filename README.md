@@ -1,7 +1,7 @@
 # argocd
 
 This repo uses ArgoCD (https://argo-cd.readthedocs.io/en/stable/) to deploy resources onto a Kubernetes instance.  
-It has been tested to work with TrueNAS Scale (https://www.truenas.com/truenas-scale/). It should also work with a K3s instance that has not installed traefik yet.
+It has been tested to work with TrueNAS Scale (https://www.truenas.com/truenas-scale/) or, with some additional setup, can be run on a k3s cluster that has been deployed with traefik and servicelb disabled.
 
 ## Why?
 
@@ -12,19 +12,36 @@ ArgoCD is an excellent tool for this, since it helps to visualize the Kubernetes
 
 ## Initialization
 
+These steps will install ArgoCD to kubernetes, install this repo applications, and configure your computer to be able to connect to the deployed services.
+
+### TrueNAS setup (single computer)
+
 1. In TrueNAS, enable Applications
 2. In TrueNAS, configure the UI to run on a different port (e.g. 444)
 3. Configure TrueNAS to use a static IP address. This will be necessary to route your domain to the created services.
-4. Purchase a Cloudflare domain domain and create a token for accessing it, with both READ and WRITE permissions (TODO)
-5. Edit the DNS settings for your domain in Cloudflare and add an A entry for the root (TODO)
-6. Open the TrueNAS console and use the `scripts/update_argocd.sh` commands to install argocd and enable temporary port forwarding.
-7. Manually edit your local c:\windows\system32\drivers\etc\hosts file to direct `argocd.<yourdomain>` to the TrueNAS IP.
-8. Connect to `https://argocd.<yourdomain>`
-9. Add the infrastructure chart from this repo and manually update the cloudflare API secret with the generated token.  
+
+### K3s cluster setup (multiple computers)
+
+1. Deploy the K3s cluster, disabling traefik and servicelb
+2. Follow the Common setup steps to install argocd and connect to the UI, but do not install the infrastructure chart yet
+3. Use ArgoCD to install the metallb and ceph charts.  
+   MetalLB should be configured to include a static IP address that will be used to route your domain to the created services.  
+   Ceph should be configured to match your cluster capabilities. e.g. If you have multiple nodes then your failure domain should be configured as 'host' so that a failed computer will not cause data loss.
+4. Continue with the remaining common steps.
+
+
+### Common setup
+
+1. Purchase a Cloudflare domain domain and create a token for accessing it, with both READ and WRITE permissions (TODO)
+2. Edit the DNS settings for your domain in Cloudflare and add an A entry for the root (TODO)
+3. Open the server console and use the `scripts/update_argocd.sh` commands to install argocd and enable temporary port forwarding.
+4. Manually edit your local c:\windows\system32\drivers\etc\hosts file to direct `argocd.<yourdomain>` to the server IP.
+5. Connect to `https://argocd.<yourdomain>`
+6. Add the infrastructure chart from this repo and manually update the cloudflare API secret with the generated token.  
    This will create an ingress for argocd and create a DNS server that can be used to forward your domain requests to the server from inside your network.  
    Note that you will need to manually restart the argocd-server deployment to update the configuration to enable the ingress to work correctly.
-10. Manually update the cloudflare API secret in the inadyn project with the generated token.
-11. Update your router to use the TrueNAS IP address as the DNS resolver.
+7. Manually update the cloudflare API secret in the inadyn project with the generated token.
+8. Update your router to use the static IP address as the DNS resolver.
 
 ## Apps
 
