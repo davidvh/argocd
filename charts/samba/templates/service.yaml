@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "samba.fullname" . }}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
+  labels:
+    {{- include "samba.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  publishNotReadyAddresses: false
+  loadBalancerIP: {{ .Values.host.address }}
+  ports:
+    - name: wins
+      targetPort: wins
+      port: 137
+      protocol: udp
+    - name: session
+      targetPort: session
+      port: 139
+      protocol: tcp
+    - name: cifs
+      targetPort: cifs
+      port: 445
+      protocol: tcp
+  selector:
+    {{- include "samba.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "samba.fullname" . }}
+  labels:
+    {{- include "samba.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "samba.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "samba.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "ghcr.io/servercontainers/samba:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AVAHI_NAME
+              value: StorageServer
+            - name: SAMBA_CONF_LOG_LEVEL
+              value: "3"
+
+            {{- range .Values.users }}
+            - name: ACCOUNT_{{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "samba.fullname" $ }}-{{ .name }}
+                  key: password
+            - name: UID_{{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "samba.fullname" $ }}-{{ .name }}
+                  key: uid
+            - name: GROUPS_{{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "samba.fullname" $ }}-{{ .name }}
+                  key: groups
+            {{- end }}
+
+            {{- range .Values.shares }}
+            - name: SAMBA_VOLUME_CONFIG_{{ .shortname }}
+              value: "[{{ .name }}]; path={{ .path }}; valid users = {{ .users }}; guest ok = no; read only = {{ .readonly }}; browseable = yes"
+            {{- end }}
+          ports:
+            - name: wins
+              containerPort: 137
+              protocol: udp
+            - name: session
+              containerPort: 139
+              protocol: tcp
+            - name: cifs
+              containerPort: 445
+              protocol: tcp
+          volumeMounts:
+            {{- range .Values.volumes }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .name }}
+            {{- end }}
+      volumes:
+        {{- range .Values.volumes }}
+        - name: {{ .name }}
+          persistentVolumeClaim:
+            claimName: {{ include "samba.fullname" $ }}-{{ .name }}
+        {{- end }}

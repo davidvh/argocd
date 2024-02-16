@@ -1,0 +1,23 @@
+host:
+  address: 127.0.0.1
+
+groups:
+  - name: family
+    gid: 1000
+
+users:
+  - name: admin
+    uid: 1000
+    groups: family  
+
+shares:
+  - name: Home
+    shortname: home
+    path: /shares/homes/%U
+    users: admin
+    readonly: no
+
+volumes:
+  - name: common
+    mountPath: /shares
+    size: 1Gi

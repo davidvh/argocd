@@ -1,0 +1,16 @@
+{{ range .Values.volumes }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "samba.fullname" $ }}-{{ .name }}
+  labels:
+    {{- include "samba.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .size }}
+---
+{{ end }}
