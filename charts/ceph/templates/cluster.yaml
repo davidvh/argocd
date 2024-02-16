@@ -95,3 +95,32 @@ spec:
     distributed: 1            # distributed=<0, 1> (disabled=0)
     # export:                 # export=<0-256> (disabled=-1)
     # random:                 # random=[0.0, 1.0](disabled=0.0)
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rook-cephfs
+# Change "rook-ceph" provisioner prefix to match the operator namespace if needed
+provisioner: rook-ceph.cephfs.csi.ceph.com
+parameters:
+  # clusterID is the namespace where the rook cluster is running
+  # If you change this namespace, also change the namespace below where the secret namespaces are defined
+  clusterID: {{ .Chart.Release.Namespace }}
+
+  # CephFS filesystem name into which the volume shall be created
+  fsName: {{ .Values.storage.name }}-filesystem
+
+  # Ceph pool into which the volume shall be created
+  # Required for provisionVolume: "true"
+  pool: {{ .Values.storage.name }}-mgr
+
+  # The secrets contain Ceph admin credentials. These are generated automatically by the operator
+  # in the same namespace as the cluster.
+  csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+  csi.storage.k8s.io/provisioner-secret-namespace: {{ .Chart.Release.Namespace }}
+  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+  csi.storage.k8s.io/controller-expand-secret-namespace: {{ .Chart.Release.Namespace }}
+  csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+  csi.storage.k8s.io/node-stage-secret-namespace: {{ .Chart.Release.Namespace }}
+
+reclaimPolicy: Delete
