@@ -19,6 +19,10 @@ spec:
       targetPort: session
       port: 139
       protocol: TCP
+    - name: cifsudp
+      targetPort: cifsudp
+      port: 445
+      protocol: UDP
     - name: cifs
       targetPort: cifs
       port: 445

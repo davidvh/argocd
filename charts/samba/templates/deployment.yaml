@@ -18,8 +18,6 @@ spec:
           image: "ghcr.io/servercontainers/samba:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           env:
-            - name: AVAHI_NAME
-              value: {{ .Values.host.name }}
             - name: SAMBA_CONF_LOG_LEVEL
               value: "3"
 
@@ -57,7 +55,10 @@ spec:
             - name: session
               containerPort: 139
               protocol: TCP
-            - name: cifs
+            - name: cifsudp
+              containerPort: 445
+              protocol: UDP
+            - name: cifsudp
               containerPort: 445
               protocol: TCP
           volumeMounts:

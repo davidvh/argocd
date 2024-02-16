@@ -1,6 +1,5 @@
 host:
   address: 127.0.0.1
-  name: Cluster
 
 groups:
   - name: family
