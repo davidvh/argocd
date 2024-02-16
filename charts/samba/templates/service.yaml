@@ -18,10 +18,10 @@ spec:
     - name: session
       targetPort: session
       port: 139
-      protocol: tcp
+      protocol: TCP
     - name: cifs
       targetPort: cifs
       port: 445
-      protocol: tcp
+      protocol: TCP
   selector:
     {{- include "samba.selectorLabels" . | nindent 4 }}

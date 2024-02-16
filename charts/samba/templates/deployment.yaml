@@ -48,13 +48,13 @@ spec:
           ports:
             - name: wins
               containerPort: 137
-              protocol: udp
+              protocol: UDP
             - name: session
               containerPort: 139
-              protocol: tcp
+              protocol: TCP
             - name: cifs
               containerPort: 445
-              protocol: tcp
+              protocol: TCP
           volumeMounts:
             {{- range .Values.volumes }}
             - mountPath: {{ .mountPath }}
