@@ -7,6 +7,9 @@ metadata:
   labels:
     {{- include "samba.labels" $ | nindent 4 }}
 spec:
+  {{- if .storageClassName }}
+  storageClassName: {{ .storageClassName }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:
