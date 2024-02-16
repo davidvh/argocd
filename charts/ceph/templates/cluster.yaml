@@ -105,7 +105,7 @@ provisioner: rook-ceph.cephfs.csi.ceph.com
 parameters:
   # clusterID is the namespace where the rook cluster is running
   # If you change this namespace, also change the namespace below where the secret namespaces are defined
-  clusterID: {{ .Chart.Release.Namespace }}
+  clusterID: {{ .Release.Namespace }}
 
   # CephFS filesystem name into which the volume shall be created
   fsName: {{ .Values.storage.name }}-filesystem
@@ -117,10 +117,10 @@ parameters:
   # The secrets contain Ceph admin credentials. These are generated automatically by the operator
   # in the same namespace as the cluster.
   csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-  csi.storage.k8s.io/provisioner-secret-namespace: {{ .Chart.Release.Namespace }}
+  csi.storage.k8s.io/provisioner-secret-namespace: {{ .Release.Namespace }}
   csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-  csi.storage.k8s.io/controller-expand-secret-namespace: {{ .Chart.Release.Namespace }}
+  csi.storage.k8s.io/controller-expand-secret-namespace: {{ .Release.Namespace }}
   csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-  csi.storage.k8s.io/node-stage-secret-namespace: {{ .Chart.Release.Namespace }}
+  csi.storage.k8s.io/node-stage-secret-namespace: {{ .Release.Namespace }}
 
 reclaimPolicy: Delete
