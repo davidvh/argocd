@@ -14,15 +14,15 @@ spec:
     - name: wins
       targetPort: wins
       port: 137
-      protocol: UDP
+      protocol: TCP
+    - name: diagram
+      targetPort: diagram
+      port: 138
+      protocol: TCP
     - name: session
       targetPort: session
       port: 139
       protocol: TCP
-    - name: cifsudp
-      targetPort: cifsudp
-      port: 445
-      protocol: UDP
     - name: cifs
       targetPort: cifs
       port: 445

@@ -51,13 +51,13 @@ spec:
           ports:
             - name: wins
               containerPort: 137
-              protocol: UDP
+              protocol: TCP
+            - name: diagram
+              containerPort: 138
+              protocol: TCP
             - name: session
               containerPort: 139
               protocol: TCP
-            - name: cifsudp
-              containerPort: 445
-              protocol: UDP
             - name: cifs
               containerPort: 445
               protocol: TCP
