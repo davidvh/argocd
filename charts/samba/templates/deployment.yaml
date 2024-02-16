@@ -58,7 +58,7 @@ spec:
             - name: cifsudp
               containerPort: 445
               protocol: UDP
-            - name: cifsudp
+            - name: cifs
               containerPort: 445
               protocol: TCP
           volumeMounts:
