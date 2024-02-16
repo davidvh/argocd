@@ -19,9 +19,14 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: AVAHI_NAME
-              value: StorageServer
+              value: {{ .Values.host.name }}
             - name: SAMBA_CONF_LOG_LEVEL
               value: "3"
+
+            {{- range .Values.groups }}
+            - name: GROUP_{{ .name }}
+              value: "{{ .gid }}"
+            {{- end }}
 
             {{- range .Values.users }}
             - name: ACCOUNT_{{ .name }}
