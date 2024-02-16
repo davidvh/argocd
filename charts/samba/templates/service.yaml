@@ -14,7 +14,7 @@ spec:
     - name: wins
       targetPort: wins
       port: 137
-      protocol: udp
+      protocol: UDP
     - name: session
       targetPort: session
       port: 139
