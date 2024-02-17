@@ -18,6 +18,14 @@ spec:
           image: "ghcr.io/servercontainers/samba:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           env:
+            - name: SAMBA_CONF_SERVER_STRING
+              value: {{ .Values.host.domain }}
+            - name: SAMBA_GLOBAL_STANZA
+              value: netbios name = {{ .Values.host.domain }}
+            - name: AVAHI_DISABLE
+              value: 'true'
+            - name: WSDD2_DISABLE
+              value: 'true'
             - name: SAMBA_CONF_LOG_LEVEL
               value: "3"
 

@@ -1,9 +1,10 @@
 host:
   address: 127.0.0.1
+  domain: example.com
 
 groups:
   - name: family
-    gid: 1000
+    gid: 2000
 
 users:
   - name: admin
