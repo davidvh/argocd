@@ -19,6 +19,7 @@ shares:
     readonly: no
 
 volumes:
-  - name: common
-    mountPath: /shares
+  - name: adminhome
+    mountPath: /shares/homes/admin
     size: 1Gi
+    chown: 1000:1000
