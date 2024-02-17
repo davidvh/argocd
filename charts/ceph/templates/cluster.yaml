@@ -56,18 +56,6 @@ spec:
     # requireSafeReplicaSize: false
 ---
 apiVersion: ceph.rook.io/v1
-kind: CephBlockPool
-metadata:
-  name: {{ .Values.storage.name }}-data
-  namespace: rook-ceph
-spec:
-  name: {{ .Values.storage.blockname }}
-  failureDomain: {{ .Values.storage.failureDomain }}
-  replicated:
-    size: {{ .Values.storage.replicas }}
-    # requireSafeReplicaSize: false
----
-apiVersion: ceph.rook.io/v1
 kind: CephFilesystem
 metadata:
   name: {{ .Values.storage.name }}-filesystem
