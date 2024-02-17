@@ -112,6 +112,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ include "samba.fullname" . }}-scripts
+            defaultMode: 511
             items:
               - key: setowners.sh
                 path: setowners.sh
