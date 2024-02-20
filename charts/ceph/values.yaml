@@ -7,6 +7,9 @@ rook-ceph:
   monitoring:
     enabled: true
 
+csi:
+  default: true
+
 domainName: example.com
 
 storage:
