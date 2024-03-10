@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: piraeus-operator
-  namespace: {{ .Release.Namespace }}
+  namespace: argocd
 spec:
   project: {{ .Values.destination.project }}
   source:
