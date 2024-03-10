@@ -3,3 +3,7 @@ storage:
     filePath: /var/lib/piraeus/default
   # - pool: lvm
   #   volumeGroup: vg0
+
+destination:
+  server: https://kubernetes.default.svc
+  project: default
