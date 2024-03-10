@@ -3,6 +3,7 @@ storage:
     filePath: /var/lib/piraeus/default
   # - pool: lvm
   #   volumeGroup: vg0
+  #   replicaCount: 3
 
 destination:
   server: https://kubernetes.default.svc

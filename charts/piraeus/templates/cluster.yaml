@@ -10,6 +10,13 @@ kind: LinstorSatelliteConfiguration
 metadata:
   name: storage-pool
 spec:
+  # See https://github.com/piraeusdatastore/piraeus-operator/blob/v2/docs/how-to/drbd-loader.md
+  # Configure modprobe to run during startup rather than using the loader image
+  podTemplate:
+    spec:
+      initContainers:
+        - name: drbd-module-loader
+          $patch: delete
   storagePools:
 {{- range .Values.storage }}
     - name: {{ .pool }}
@@ -34,4 +41,5 @@ allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 parameters:
   linstor.csi.linbit.com/storagePool: {{ .pool }}
+  linstor.csi.linbit.com/placementCount: "{{ .replicaCount | default 2 }}"
 {{- end }}
