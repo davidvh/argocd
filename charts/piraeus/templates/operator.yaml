@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: piraeus-operator
+  namespace: {{ .Release.Namespace }}
+spec:
+  project: {{ .Values.destination.project }}
+  source:
+    repoURL: 'https://github.com/piraeusdatastore/piraeus-operator'
+    path: config/default
+    targetRevision: {{ .Chart.AppVersion }}
+  destination:
+    server: {{ .Values.destination.server }}
+    namespace: {{ .Release.Namespace }}
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
