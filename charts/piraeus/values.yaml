@@ -1,0 +1,5 @@
+storage:
+  - pool: files
+    filePath: /var/lib/piraeus/default
+  # - pool: lvm
+  #   volumeGroup: vg0
