@@ -1,0 +1,5 @@
+# Copy this to /etc/rancker/k3s/config.yaml to configure a supported K3s cluster
+disable:
+  - traefik
+  - servicelb
+  - local-storage
