@@ -4,12 +4,15 @@ metadata:
   name: argocd-server
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: "ArgoCD"
     gethomepage.dev/description: "Kubernetes management"
     gethomepage.dev/group: "Backend"
     gethomepage.dev/icon: "argocd.png"
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - 'argocd.{{ .Values.host.domainName }}'
@@ -24,5 +27,4 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  name: http
-
+                  name: https
