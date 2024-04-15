@@ -54,6 +54,7 @@ spec:
             - name: MAILDEV_OUTGOING_SECURE
               value: 'true'
           image: 'maildev/maildev:{{ .Chart.AppVersion }}'
+          # See https://hub.docker.com/r/maildev/maildev/tags
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 1025

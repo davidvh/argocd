@@ -22,6 +22,7 @@ spec:
         fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: {{ .Chart.Name }}
+          # See https://github.com/gotson/komga/pkgs/container/komga/versions?filters%5Bversion_type%5D=tagged
           image: "ghcr.io/gotson/komga:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           ports:

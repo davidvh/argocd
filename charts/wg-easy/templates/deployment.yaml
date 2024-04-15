@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
         - name: {{ include "wgeasy.fullname" . }}
+          # See https://github.com/wg-easy/wg-easy/pkgs/container/wg-easy/versions?filters%5Bversion_type%5D=tagged
           image: ghcr.io/wg-easy/wg-easy:{{ .Chart.AppVersion }}
           imagePullPolicy: IfNotPresent
           ports:

@@ -15,6 +15,7 @@ spec:
     spec:
       initContainers:
         - name: {{ .Chart.Name }}-createconfig
+          # See https://hub.docker.com/_/python/tags?page=&page_size=&ordering=&name=alpine3
           image: python:alpine3.19
           imagePullPolicy: IfNotPresent
           command:
@@ -35,6 +36,7 @@ spec:
               readOnly: true
       containers:
         - name: {{ .Chart.Name }}
+          # See https://hub.docker.com/r/troglobit/inadyn/tags
           image: "troglobit/inadyn:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           readinessProbe:

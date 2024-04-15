@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - name: {{ include "authelia.fullname" . }}
+          # See https://github.com/authelia/authelia/pkgs/container/authelia/versions?filters%5Bversion_type%5D=tagged
           image: ghcr.io/authelia/authelia:{{ .Chart.AppVersion }}
           imagePullPolicy: IfNotPresent
           ports:

@@ -17,6 +17,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
+          # See https://quay.io/repository/linuxserver.io/jellyfin?tab=tags
           image: "quay.io/linuxserver.io/jellyfin:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           env:
