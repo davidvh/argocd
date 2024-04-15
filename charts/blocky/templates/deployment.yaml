@@ -60,6 +60,7 @@ spec:
           value: "53"
       containers:
         - name: {{ include "blocky.fullname" . }}
+          # See https://hub.docker.com/r/spx01/blocky/tags
           image: spx01/blocky:{{ .Chart.AppVersion }}
           imagePullPolicy: IfNotPresent
           ports:

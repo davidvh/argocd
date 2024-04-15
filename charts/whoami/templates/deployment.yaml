@@ -13,6 +13,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.service.name }}
+          # See https://hub.docker.com/r/traefik/whoami/tags
           image: traefik/whoami:{{ .Chart.AppVersion }}
           ports:
             - name: web

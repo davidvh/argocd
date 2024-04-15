@@ -53,6 +53,7 @@ spec:
                 name: {{ include "tandoor.fullname" . }}-db-app
                 key: password
         image: vabene1111/recipes:{{ .Chart.AppVersion }}
+        # See https://hub.docker.com/r/vabene1111/recipes/tags
         imagePullPolicy: Always
         command:
         - sh
@@ -80,6 +81,7 @@ spec:
           subPath: files
       containers:
       - name: {{ include "tandoor.fullname" . }}-nginx
+        # https://hub.docker.com/_/nginx/tags
         image: nginx:{{ .Values.service.nginxVersion }}
         imagePullPolicy: IfNotPresent
         ports:

@@ -20,6 +20,7 @@ spec:
     spec:
       containers:
         - image: nitnelave/lldap:{{ .Chart.AppVersion }}
+          # See https://hub.docker.com/r/nitnelave/lldap/tags
           name: {{ include "lldap.fullname" . }}
           env:
             - name: UID

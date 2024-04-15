@@ -19,6 +19,7 @@ spec:
       serviceAccountName: {{ .Chart.Name }}
       containers:
         - name: {{ .Chart.Name }}
+          # See https://github.com/crazy-max/diun/pkgs/container/diun/versions?filters%5Bversion_type%5D=tagged
           image: ghcr.io/crazy-max/diun:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
           args: ["serve"]

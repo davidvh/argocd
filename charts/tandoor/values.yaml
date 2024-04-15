@@ -1,6 +1,6 @@
 service:
   name: tandoor
-  nginxVersion: 1.25.3
+  nginxVersion: 1.25.4
 
 ingress:
   domainName: example.com
