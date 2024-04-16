@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: {{ include "bookstack.fullname" . }}
-          # See https://quay.io/repository/linuxserver.io/bookstack?tab=tags
-          image: quay.io/linuxserver/bookstack:{{ .Chart.AppVersion }}
+          # See https://github.com/linuxserver/docker-bookstack/pkgs/container/bookstack
+          image: ghcr.io/linuxserver/bookstack:{{ .Chart.AppVersion }}
           ports:
             - name: web
               containerPort: 80
