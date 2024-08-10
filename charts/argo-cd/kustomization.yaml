@@ -6,7 +6,4 @@ kind: Kustomization
 resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-patchesStrategicMerge:
-- argocd-cmd-params-cm.yaml
-
 namespace: argocd
