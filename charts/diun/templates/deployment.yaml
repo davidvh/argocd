@@ -36,8 +36,10 @@ spec:
               value: "30s"
             - name: DIUN_DEFAULTS_WATCHREPO
               value: 'true'
-            - name: DIUN_DEFAULTS_INCLUDETAGS
-              value: '^(latest)|(stable)$'
+            - name: DIUN_DEFAULTS_MAXTAGS
+              value: '10'
+            - name: DIUN_DEFAULTS_SORTTAGS
+              value: semver
             - name: DIUN_PROVIDERS_KUBERNETES
               value: "true"
             - name: DIUN_PROVIDERS_KUBERNETES_WATCHBYDEFAULT
