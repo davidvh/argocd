@@ -1,0 +1,11 @@
+{{ range .Values.pools }}
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: {{ .name | quote }}
+  namespace: metallb-system
+spec:
+  addresses:
+    {{ .addresses | toYaml }}
+{{ end }}
