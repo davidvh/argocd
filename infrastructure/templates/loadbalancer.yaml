@@ -16,7 +16,7 @@ spec:
         pools:
           - name: primarypool
             addresses:
-              - {{ .Values.host.address }}
+              - {{ .Values.host.address }}/32
     targetRevision: HEAD
   destination:
     server: {{ .Values.destination.server }}
