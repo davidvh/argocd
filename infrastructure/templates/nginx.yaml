@@ -16,6 +16,9 @@ spec:
         service:
           annotations:
             metallb.universe.tf/allow-shared-ip: cluster
+        controller:
+          extraArgs:
+            enable-ssl-passthrough: ''
       parameters:
         - name: "controller.ingressClassResource.default"
           value: "true"

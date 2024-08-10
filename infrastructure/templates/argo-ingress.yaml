@@ -2,8 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server
+  namespace: argocd
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: "ArgoCD"
     gethomepage.dev/description: "Kubernetes management"
@@ -24,5 +27,5 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  name: http
+                  name: https
 
