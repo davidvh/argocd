@@ -9,7 +9,7 @@ spec:
   project: {{ .Values.destination.project }}
   source:
     repoURL: "https://cloudnative-pg.github.io/charts"
-    targetRevision: 0.20.0
+    targetRevision: 0.21.6
     chart: cloudnative-pg
   destination:
     server: {{ .Values.destination.server }}
@@ -18,4 +18,5 @@ spec:
     automated:
       selfHeal: true
     syncOptions:
+      - ServerSideApply=true
       - CreateNamespace=true
