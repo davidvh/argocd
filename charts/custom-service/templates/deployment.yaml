@@ -1,6 +1,7 @@
 {{- $chart := .Chart -}}
 {{- $release := .Release }}
 {{- range .Values.deployments }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

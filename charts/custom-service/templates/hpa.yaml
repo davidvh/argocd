@@ -3,7 +3,7 @@
 {{- range .Values.deployments }}
 {{- $autoscale := and .autoscaling .autoscaling.enabled }}
 {{- if $autoscale }}
-
+---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

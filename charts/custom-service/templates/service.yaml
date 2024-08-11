@@ -3,6 +3,7 @@
 {{- range .Values.deployments }}
 {{- $deployment := . }}
 {{- range .containers }}
+---
 apiVersion: v1
 kind: Service
 metadata:
