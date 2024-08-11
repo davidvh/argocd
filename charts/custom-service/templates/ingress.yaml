@@ -15,11 +15,11 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
     {{- with .homepage }}
-    gethomepage.dev/enabled: {{ .enabled | default "True" | quote }}
+    gethomepage.dev/enabled: {{ .enabled | default "true" | quote }}
     gethomepage.dev/name: {{ .name | quote }}
     gethomepage.dev/description: {{ .desc | quote }}
     gethomepage.dev/group: {{ .group | quote }}
-    gethomepage.dev/icon: {{ .icon | default "" | quote }}
+    gethomepage.dev/icon: {{ .icon | default "mdi-docker" | quote }}
     {{- end }}
 spec:
   tls:
