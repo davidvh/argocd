@@ -1,0 +1,50 @@
+# Default values for custom-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployments:
+  - name: custom
+    labels:
+      custom: mylabel
+    serviceAccount:
+      name: customaccount
+    strategy:
+      type: Recreate
+    containers:
+      - name: host
+        image: nginx
+        tag: "1.16.0"
+        env:
+          - name: NAME
+            value: myname
+        endpoints:
+          - name: http
+            protocol: TCP
+            port: 80
+            serviceType: ClusterIP
+            servicePort: 80
+            ingress:
+              hostname: nginx.local
+              homepage:
+                name: nginx
+                desc: Example ingress service
+                group: testing
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+
+secrets:
+  - name: mysecret
+    generate:
+      fields: password
+    stringData:
+      username: admin
+
+serviceAccounts:
+  - name: customaccount
+

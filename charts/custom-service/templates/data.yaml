@@ -1,0 +1,26 @@
+{{- $chart := .Chart -}}
+{{- $release := .Release }}
+{{- range .Values.secrets }}
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: {{ .name }}
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/instance: {{ $release.Name }}
+  annotations:
+    {{- with .generate }}
+    {{- $gentype := .type | default "string" }}
+    {{- if eq $gentype "string" }}
+    secret-generator.v1.mittwald.de/length: {{ .length | default "10"}}
+    secret-generator.v1.mittwald.de/autogenerate: {{ .fields }}
+    {{- else }}
+    secret-generator.v1.mittwald.de/type: {{ $gentype }}
+    {{- end }}
+    {{- end }}
+{{- with .stringData }}
+stringData:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,44 @@
+{{- $chart := .Chart -}}
+{{- $release := .Release }}
+{{- range .Values.deployments }}
+{{- $deployment := . }}
+{{- range .containers }}
+{{- $container := . }}
+{{- range .endpoints }}
+{{- $endpoint := . }}
+{{- with .ingress }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $deployment.name }}-{{ .name }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    {{- with .homepage }}
+    gethomepage.dev/enabled: {{ .enabled | default "True" }}
+    gethomepage.dev/name: {{ .name }}
+    gethomepage.dev/description: {{ .desc }}
+    gethomepage.dev/group: {{ .group }}
+    gethomepage.dev/icon: {{ .icon }}
+    {{- end }}
+spec:
+  tls:
+    - hosts:
+        - {{ .hostname }}
+      secretName: {{ $deployment.name }}-{{ .name }}-ssl
+  rules:
+    - host: {{ .hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $deployment.name }}-{{ $container.name }}
+                port:
+                  name: {{ $endpoint.name }}
+
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
