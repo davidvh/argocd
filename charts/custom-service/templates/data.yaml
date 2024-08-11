@@ -24,3 +24,18 @@ stringData:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}
+
+{{- range .Values.configMaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/instance: {{ $release.Name }}
+  name: {{ .name }}
+{{- with .data }}
+data:
+  {{- toYaml . | nindent 2}}
+{{- end }}
+
+{{- end }}

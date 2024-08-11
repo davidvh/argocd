@@ -48,3 +48,10 @@ secrets:
 serviceAccounts:
   - name: customaccount
 
+customResources:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: myCustomConfigMap
+    data:
+      test: someData
