@@ -38,20 +38,22 @@ deployments:
             cpu: 100m
             memory: 128Mi
 
-secrets:
-  - name: mysecret
-    generate:
-      fields: password
-    stringData:
-      username: admin
+secrets: []
+  # - name: mysecret
+  #   generate:
+  #     fields: password
+  #   stringData:
+  #     username: admin
 
-serviceAccounts:
-  - name: customaccount
+configMaps: []
 
-customResources:
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: myCustomConfigMap
-    data:
-      test: someData
+serviceAccounts: []
+  # - name: customaccount
+
+customResources: []
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: myCustomConfigMap
+  #   data:
+  #     test: someData
