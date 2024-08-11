@@ -13,10 +13,10 @@ metadata:
     {{- with .generate }}
     {{- $gentype := .type | default "string" }}
     {{- if eq $gentype "string" }}
-    secret-generator.v1.mittwald.de/length: {{ .length | default "10"}}
-    secret-generator.v1.mittwald.de/autogenerate: {{ .fields }}
+    secret-generator.v1.mittwald.de/length: {{ .length | default 10 | quote }}
+    secret-generator.v1.mittwald.de/autogenerate: {{ .fields | quote }}
     {{- else }}
-    secret-generator.v1.mittwald.de/type: {{ $gentype }}
+    secret-generator.v1.mittwald.de/type: {{ $gentype | quote }}
     {{- end }}
     {{- end }}
 {{- with .stringData }}

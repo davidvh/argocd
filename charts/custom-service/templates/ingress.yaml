@@ -11,21 +11,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $deployment.name }}-{{ .name }}
+  name: {{ $deployment.name }}-{{ $container.name }}-{{ $endpoint.name }}
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-issuer
     {{- with .homepage }}
-    gethomepage.dev/enabled: {{ .enabled | default "True" }}
-    gethomepage.dev/name: {{ .name }}
-    gethomepage.dev/description: {{ .desc }}
-    gethomepage.dev/group: {{ .group }}
-    gethomepage.dev/icon: {{ .icon }}
+    gethomepage.dev/enabled: {{ .enabled | default "True" | quote }}
+    gethomepage.dev/name: {{ .name | quote }}
+    gethomepage.dev/description: {{ .desc | quote }}
+    gethomepage.dev/group: {{ .group | quote }}
+    gethomepage.dev/icon: {{ .icon | default "" | quote }}
     {{- end }}
 spec:
   tls:
     - hosts:
         - {{ .hostname }}
-      secretName: {{ $deployment.name }}-{{ .name }}-ssl
+      secretName: {{ $deployment.name }}-{{ $container.name }}-{{ $endpoint.name }}-ssl
   rules:
     - host: {{ .hostname }}
       http:
