@@ -1,0 +1,77 @@
+{{- range .Values.storage }}
+---
+{{- if eq .type "pvc" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .name }}
+spec:
+  accessModes:
+    - {{ .accessMode | default "ReadWriteOnce" }}
+  resources:
+    requests:
+      storage: {{ .size }}
+{{- else if eq .type "smb" }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .name }}
+spec:
+  storageClassName: smb
+  capacity:
+    storage: {{ .size }}
+  accessModes:
+    - {{ .accessMode | default "ReadWriteMany" }}
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid={{ .uid }}
+    - gid={{ .gid }}
+    - noperm
+    - mfsymlinks
+    - cache=strict
+    - noserverino  # required to prevent data corruption
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: '{{ $.Release.Namespace }}/{{ .name }}'  # make sure it's a unique id in the cluster
+    volumeAttributes:
+      source: '//{{ .host }}/{{ .share }}'
+    nodeStageSecretRef:
+      name: {{ .secret }}
+      namespace: {{ $.Release.Namespace }}
+{{- else if eq .type "mariadb" }}
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: MariaDB
+metadata:
+  name: {{ .name }}
+spec:
+  rootPasswordSecretKeyRef:
+    name: {{ .rootSecret | default (cat .name "root" | replace " " "-") }}
+    key: password
+
+  username: {{ .username }}
+  passwordSecretKeyRef:
+    name: {{ .usernameSecret | default (cat .name "user" | replace " " "-") }}
+    key: password
+  database: {{ .database }}
+
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: {{ .size }}
+    accessModes:
+      - ReadWriteOnce
+
+  myCnf: |-
+    [mariadb]
+    bind-address=*
+    default_storage_engine=InnoDB
+    binlog_format=row
+    innodb_autoinc_lock_mode=2
+    max_allowed_packet=256M
+{{- end }}
+
+{{- end }}
